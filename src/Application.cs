@@ -3,49 +3,56 @@
 using SFML.Window;
 using SFML.Graphics;
 using SFML.System;
+using System.Diagnostics;
 
 public class Application
 {
-    private RenderWindow window;
-    private TestScreen00 screen0;
-    private TestScreen01 screen1;
+    private static Application instance;
+    public static Application Instance { get { return instance; } }
+
+    public RenderWindow Window { get; private set; }
+
+    private GameScreen gameScreen;
 
     public Application()
     {
-        this.window = new RenderWindow(new VideoMode(800, 600), "Best Pong", Styles.Default);
-        window.Closed += this.Window_Closed;
-        window.KeyReleased += this.Window_KeyReleased;
+        Debug.Assert(instance == null);
+        instance = this;
 
-        screen0 = new TestScreen00();
-        screen1 = new TestScreen01();
+        Window = new RenderWindow(new VideoMode(800, 600), "Best Pong", Styles.Default);
+        Window.Closed += this.Window_Closed;
+        Window.KeyReleased += this.Window_KeyReleased;
 
-        ScreenManager.Instance.ChangeScreen(screen0);
+        gameScreen = new GameScreen();
+
+        ScreenManager.Instance.ChangeScreen(gameScreen);
     }
 
     private void Window_KeyReleased(object sender, KeyEventArgs e)
     {
-        ScreenManager.Instance.ChangeScreen(screen1);
     }
 
     public void Run()
     {
         Clock clock = new Clock();
 
-        while (window.IsOpen)
+        while (Window.IsOpen)
         {
             float deltaTime = clock.Restart().AsSeconds();
 
-            window.DispatchEvents();
+            Window.DispatchEvents();
 
-            window.Clear(Color.Red);
+            Window.Clear(Color.Black);
 
             ScreenManager.Instance.Update(deltaTime);
-            ScreenManager.Instance.Render(window);
+            ScreenManager.Instance.Render(Window);
 
-            window.Display();
+            GameManager.Instance.Update(deltaTime);
+
+            Window.Display();
         }
 
-        window.Dispose();
+        Window.Dispose();
     }
 
     private void Window_Closed(object sender, EventArgs e)

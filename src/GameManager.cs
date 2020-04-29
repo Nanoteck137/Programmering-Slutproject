@@ -13,5 +13,17 @@ public class GameManager
         }
     }
 
-    private GameManager() { }
+    public GameModel Model { get; private set; }
+
+    private GameManager()
+    {
+        Model = new GameModel();
+    }
+
+    public void NewGame() { }
+
+    public void Update(float deltaTime)
+    {
+        Model.Update(deltaTime);
+    }
 }
