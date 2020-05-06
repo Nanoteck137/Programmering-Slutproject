@@ -14,8 +14,6 @@ public class GameModel
     {
         Vector2u windowSize = Application.Instance.Window.Size;
 
-
-
         float ballRadius = 20.0f;
         Ball = new Ball(new Vector2f(windowSize.X / 2 - ballRadius / 2, windowSize.Y / 2 - ballRadius / 2), ballRadius);
 
@@ -47,5 +45,6 @@ public class GameModel
     {
         LeftPaddle.Update(deltaTime);
         RightPaddle.Update(deltaTime);
+        Ball.Update(deltaTime);
     }
 }
