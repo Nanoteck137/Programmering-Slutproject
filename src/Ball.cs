@@ -8,7 +8,7 @@ public class Ball
     public Vector2f Position { get; private set; }
     public float Radius { get; private set; }
 
-    private Vector2f direction;
+    public Vector2f Direction { get; set; }
 
     public Ball(Vector2f position, float radius)
     {
@@ -16,7 +16,7 @@ public class Ball
         Radius = radius;
 
         Random random = new Random();
-        direction = new Vector2f(1, 1);
+        Direction = new Vector2f(1, 1);
         //direction = new Vector2f(1.0f, 0.0f);
     }
 
@@ -24,27 +24,31 @@ public class Ball
     {
         float speed = 300.0f;
 
-        Position += direction * speed * deltaTime;
+        Position += Direction * speed * deltaTime;
 
         Vector2u windowSize = Application.Instance.Window.Size;
+
+        Vector2f dir = Direction;
         if (Position.X < 0.0f)
         {
-            direction.X *= -1;
+            dir.X *= -1;
         }
 
         if (Position.X + Radius > windowSize.X)
         {
-            direction.X *= -1;
+            dir.X *= -1;
         }
 
-        if (Position.Y < 0.0f)
+        if (Position.Y - Radius < 0.0f)
         {
-            direction.Y *= -1;
+            dir.Y *= -1;
         }
 
         if (Position.Y + Radius > windowSize.Y)
         {
-            direction.Y *= -1;
+            dir.Y *= -1;
         }
+
+        Direction = dir;
     }
 }

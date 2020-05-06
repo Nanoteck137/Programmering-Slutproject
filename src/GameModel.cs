@@ -29,7 +29,7 @@ public class GameModel
             DownKey = Keyboard.Key.S,
         };
 
-        LeftPaddle = new PlayerPaddle(leftConfig);
+        LeftPaddle = new PlayerPaddle(leftConfig, Ball);
 
         PlayerPaddle.Config rightConfig = new PlayerPaddle.Config()
         {
@@ -38,13 +38,43 @@ public class GameModel
             UpKey = Keyboard.Key.Up,
             DownKey = Keyboard.Key.Down,
         };
-        RightPaddle = new PlayerPaddle(rightConfig);
+        RightPaddle = new PlayerPaddle(rightConfig, Ball);
+    }
+
+    private void CheckBallCollisionLeftPaddle()
+    {
+        if (Ball.Position.X - Ball.Radius < LeftPaddle.Position.X + LeftPaddle.Size.X / 2 &&
+            Ball.Position.X - Ball.Radius > LeftPaddle.Position.X &&
+            Ball.Position.Y + Ball.Radius >= LeftPaddle.Position.Y - LeftPaddle.Size.Y / 2 &&
+            Ball.Position.Y - Ball.Radius <= LeftPaddle.Position.Y + LeftPaddle.Size.Y / 2)
+        {
+            Vector2f dir = Ball.Direction;
+            dir.X *= -1;
+            Ball.Direction = dir;
+        }
+    }
+
+    private void CheckBallCollisionRightPaddle()
+    {
+        if (Ball.Position.X + Ball.Radius < RightPaddle.Position.X + RightPaddle.Size.X / 2 &&
+            Ball.Position.X + Ball.Radius > RightPaddle.Position.X &&
+            Ball.Position.Y + Ball.Radius >= RightPaddle.Position.Y - RightPaddle.Size.Y / 2 &&
+            Ball.Position.Y - Ball.Radius <= RightPaddle.Position.Y + RightPaddle.Size.Y / 2)
+        {
+            Vector2f dir = Ball.Direction;
+            dir.X *= -1;
+            Ball.Direction = dir;
+        }
     }
 
     public void Update(float deltaTime)
     {
         LeftPaddle.Update(deltaTime);
         RightPaddle.Update(deltaTime);
+
+        CheckBallCollisionLeftPaddle();
+        CheckBallCollisionRightPaddle();
+
         Ball.Update(deltaTime);
     }
 }

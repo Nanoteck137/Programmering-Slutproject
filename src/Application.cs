@@ -19,7 +19,7 @@ public class Application
         Debug.Assert(instance == null);
         instance = this;
 
-        Window = new RenderWindow(new VideoMode(800, 600), "Best Pong", Styles.Default);
+        Window = new RenderWindow(new VideoMode(1280, 720), "Best Pong", Styles.Default);
         Window.Closed += this.Window_Closed;
         Window.KeyReleased += this.Window_KeyReleased;
 

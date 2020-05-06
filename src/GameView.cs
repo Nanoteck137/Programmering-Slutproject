@@ -16,8 +16,13 @@ public class GameView
         Model = model;
 
         leftPaddle = new RectangleShape(model.LeftPaddle.Size);
+        leftPaddle.Origin = new Vector2f(model.LeftPaddle.Size.X / 2.0f, model.LeftPaddle.Size.Y / 2.0f);
+
         rightPaddle = new RectangleShape(model.RightPaddle.Size);
+        rightPaddle.Origin = new Vector2f(model.RightPaddle.Size.X / 2.0f, model.RightPaddle.Size.Y / 2.0f);
+
         ball = new CircleShape(model.Ball.Radius);
+        ball.Origin = new Vector2f(model.Ball.Radius, model.Ball.Radius);
     }
 
     public void Render(RenderTarget renderTarget)

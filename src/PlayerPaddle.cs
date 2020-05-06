@@ -15,13 +15,15 @@ public class PlayerPaddle : Paddle
     }
 
     private Config config;
+    private Ball ball;
 
-    public PlayerPaddle(Config config)
+    public PlayerPaddle(Config config, Ball ball)
     {
         Position = config.InitialPosition;
         Size = config.Size;
 
         this.config = config;
+        this.ball = ball;
     }
 
     public override void Update(float deltaTime)
@@ -37,5 +39,7 @@ public class PlayerPaddle : Paddle
         }
 
         Position = position;
+
+
     }
 }
