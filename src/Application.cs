@@ -12,6 +12,7 @@ public class Application
 
     public RenderWindow Window { get; private set; }
 
+    private MainMenuScreen mainMenuScreen;
     private GameScreen gameScreen;
 
     public Application()
@@ -24,8 +25,9 @@ public class Application
         Window.KeyReleased += this.Window_KeyReleased;
 
         gameScreen = new GameScreen();
+        mainMenuScreen = new MainMenuScreen();
 
-        ScreenManager.Instance.ChangeScreen(gameScreen);
+        ScreenManager.Instance.ChangeScreen(mainMenuScreen);
     }
 
     private void Window_KeyReleased(object sender, KeyEventArgs e)

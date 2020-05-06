@@ -15,15 +15,15 @@ public class GameModel
         Vector2u windowSize = Application.Instance.Window.Size;
 
         float ballRadius = 20.0f;
-        Ball = new Ball(new Vector2f(windowSize.X / 2 - ballRadius / 2, windowSize.Y / 2 - ballRadius / 2), ballRadius);
+        Ball = new Ball(new Vector2f(windowSize.X / 2, windowSize.Y / 2), ballRadius);
 
-        float offset = 20.0f;
+        float offset = 25.0f;
         float paddleWidth = 16.0f;
         float paddleHeight = 200.0f;
 
         PlayerPaddle.Config leftConfig = new PlayerPaddle.Config()
         {
-            InitialPosition = new Vector2f(offset, windowSize.Y / 2 - paddleHeight / 2),
+            InitialPosition = new Vector2f(offset, windowSize.Y / 2),
             Size = new Vector2f(paddleWidth, paddleHeight),
             UpKey = Keyboard.Key.W,
             DownKey = Keyboard.Key.S,
@@ -33,7 +33,7 @@ public class GameModel
 
         PlayerPaddle.Config rightConfig = new PlayerPaddle.Config()
         {
-            InitialPosition = new Vector2f(windowSize.X - paddleWidth - offset, windowSize.Y / 2 - paddleHeight / 2),
+            InitialPosition = new Vector2f(windowSize.X - offset, windowSize.Y / 2),
             Size = new Vector2f(paddleWidth, paddleHeight),
             UpKey = Keyboard.Key.Up,
             DownKey = Keyboard.Key.Down,
