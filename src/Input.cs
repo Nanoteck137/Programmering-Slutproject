@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using SFML.Window;
 
 class Input
@@ -23,15 +22,22 @@ class Input
     public const int XBUTTON2_BUTTON = 4;
 
     private bool[] mouseButtonState;
+    private bool[] prevMouseButtonState;
 
     private Input()
     {
-        mouseButtonState = new bool[(int)Mouse.Button.ButtonCount];
+        int buttonStateCount = (int)Mouse.Button.ButtonCount;
+        mouseButtonState = new bool[buttonStateCount];
+
+        prevMouseButtonState = new bool[buttonStateCount];
     }
 
     public void Update()
     {
-
+        for (int i = 0; i < mouseButtonState.Length; i++)
+        {
+            prevMouseButtonState[i] = mouseButtonState[i];
+        }
     }
 
     public void SetButtonState(int button, bool state)
@@ -42,5 +48,10 @@ class Input
     public bool IsButtonDown(int button)
     {
         return mouseButtonState[button];
+    }
+
+    public bool IsButtonPressed(int button)
+    {
+        return mouseButtonState[button] && !prevMouseButtonState[button];
     }
 }

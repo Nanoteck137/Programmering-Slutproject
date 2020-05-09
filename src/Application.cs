@@ -15,6 +15,8 @@ public class Application
     private MainMenuScreen mainMenuScreen;
     private GameScreen gameScreen;
 
+    private bool running = false;
+
     public Application()
     {
         Debug.Assert(instance == null);
@@ -22,7 +24,6 @@ public class Application
 
         Window = new RenderWindow(new VideoMode(1280, 720), "Best Pong", Styles.Default);
         Window.Closed += this.Window_Closed;
-        Window.KeyReleased += this.Window_KeyReleased;
         Window.MouseButtonPressed += this.Window_MouseButtonPressed;
         Window.MouseButtonReleased += this.Window_MouseButtonReleased;
 
@@ -32,25 +33,17 @@ public class Application
         ScreenManager.Instance.ChangeScreen(mainMenuScreen);
     }
 
-    private void Window_KeyReleased(object sender, KeyEventArgs e)
+    public void ExitGame()
     {
-    }
-
-    private void Window_MouseButtonPressed(object sender, MouseButtonEventArgs e)
-    {
-        Input.Instance.SetButtonState((int)e.Button, true);
-    }
-
-    private void Window_MouseButtonReleased(object sender, MouseButtonEventArgs e)
-    {
-        Input.Instance.SetButtonState((int)e.Button, false);
+        running = false;
     }
 
     public void Run()
     {
+        running = true;
         Clock clock = new Clock();
 
-        while (Window.IsOpen)
+        while (running)
         {
             float deltaTime = clock.Restart().AsSeconds();
 
@@ -64,6 +57,8 @@ public class Application
             GameManager.Instance.Update(deltaTime);
 
             Window.Display();
+
+            Input.Instance.Update();
         }
 
         Window.Dispose();
@@ -71,8 +66,17 @@ public class Application
 
     private void Window_Closed(object sender, EventArgs e)
     {
-        RenderWindow window = (RenderWindow)sender;
-        window.Close();
+        running = false;
+    }
+
+    private void Window_MouseButtonPressed(object sender, MouseButtonEventArgs e)
+    {
+        Input.Instance.SetButtonState((int)e.Button, true);
+    }
+
+    private void Window_MouseButtonReleased(object sender, MouseButtonEventArgs e)
+    {
+        Input.Instance.SetButtonState((int)e.Button, false);
     }
 
     static void Main(string[] args)
