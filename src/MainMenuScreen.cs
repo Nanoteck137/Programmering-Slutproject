@@ -10,6 +10,12 @@ public class MainMenuScreen : Screen
     public MainMenuScreen()
     {
         playButton = new UIButton(new Vector2f(10, 10));
+        playButton.RegisterOnClickAciton(OnPlayButtonClicked);
+    }
+
+    private void OnPlayButtonClicked()
+    {
+        Console.WriteLine("Play Button clicked");
     }
 
     public override void Update(float deltaTime)

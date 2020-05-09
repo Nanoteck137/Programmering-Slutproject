@@ -23,6 +23,8 @@ public class Application
         Window = new RenderWindow(new VideoMode(1280, 720), "Best Pong", Styles.Default);
         Window.Closed += this.Window_Closed;
         Window.KeyReleased += this.Window_KeyReleased;
+        Window.MouseButtonPressed += this.Window_MouseButtonPressed;
+        Window.MouseButtonReleased += this.Window_MouseButtonReleased;
 
         gameScreen = new GameScreen();
         mainMenuScreen = new MainMenuScreen();
@@ -32,6 +34,16 @@ public class Application
 
     private void Window_KeyReleased(object sender, KeyEventArgs e)
     {
+    }
+
+    private void Window_MouseButtonPressed(object sender, MouseButtonEventArgs e)
+    {
+        Input.Instance.SetButtonState((int)e.Button, true);
+    }
+
+    private void Window_MouseButtonReleased(object sender, MouseButtonEventArgs e)
+    {
+        Input.Instance.SetButtonState((int)e.Button, false);
     }
 
     public void Run()

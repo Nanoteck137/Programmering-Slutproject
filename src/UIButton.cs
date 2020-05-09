@@ -8,6 +8,10 @@ class UIButton
 {
     private RectangleShape shape;
 
+    private bool prevButtonDown = false;
+
+    private Action onClickAction;
+
     public UIButton(Vector2f position)
     {
         shape = new RectangleShape(new Vector2f(200, 60));
@@ -17,13 +21,38 @@ class UIButton
         shape.OutlineThickness = 4.0f;
     }
 
+    public void RegisterOnClickAciton(Action action)
+    {
+        onClickAction += action;
+    }
+
+    public void UnregisterOnClickAction(Action action)
+    {
+        onClickAction -= action;
+    }
+
     public void Update(float deltaTime)
     {
         Vector2f mousePos = Application.Instance.Window.MapPixelToCoords(Mouse.GetPosition(Application.Instance.Window));
 
+        if (Input.Instance.IsButtonDown(Input.LEFT_BUTTON))
+        {
+            Console.WriteLine("Hello World");
+        }
+
         if (shape.GetGlobalBounds().Contains(mousePos.X, mousePos.Y))
         {
-            shape.OutlineColor = Color.Red;
+            if (!prevButtonDown && Mouse.IsButtonPressed(Mouse.Button.Left))
+            {
+                if (onClickAction != null)
+                    onClickAction();
+
+                prevButtonDown = true;
+            }
+            else
+            {
+                shape.OutlineColor = Color.Red;
+            }
         }
         else
         {
