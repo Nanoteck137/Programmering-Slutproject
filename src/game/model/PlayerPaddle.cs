@@ -3,8 +3,16 @@
 using SFML.System;
 using SFML.Window;
 
+/// <summary>
+/// This class inherits the Paddle class and it's a Player controlled 
+/// paddle so the players use the keyboard to control the paddle
+/// </summary>
 public class PlayerPaddle : Paddle
 {
+    /// <summary>
+    /// This class stores data about the paddle and how the player 
+    /// should control this specific paddle
+    /// </summary>
     public class Config
     {
         public Vector2f InitialPosition { get; set; }
@@ -14,16 +22,21 @@ public class PlayerPaddle : Paddle
         public Keyboard.Key DownKey;
     }
 
+    // The config associated with this paddle
     private Config config;
-    private Ball ball;
 
-    public PlayerPaddle(Config config, Ball ball)
+    /// <summary>
+    /// Creates the paddle with the specific config and the 
+    /// ball used in the game 
+    /// </summary>
+    /// <param name="config"></param>
+    /// <param name="ball"></param>
+    public PlayerPaddle(Config config)
     {
         Position = config.InitialPosition;
         Size = config.Size;
 
         this.config = config;
-        this.ball = ball;
     }
 
     public override void Update(float deltaTime)
@@ -39,7 +52,5 @@ public class PlayerPaddle : Paddle
         }
 
         Position = position;
-
-
     }
 }

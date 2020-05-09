@@ -1,6 +1,9 @@
 ﻿using System;
 using SFML.Graphics;
 
+/// <summary>
+///  The Game Screen displays the game
+/// </summary>
 public class GameScreen : Screen
 {
     public GameView View { get; private set; }

@@ -1,5 +1,8 @@
 ﻿using System;
 
+/// <summary>
+/// This class manages the game data
+/// </summary>
 public class GameManager
 {
     private static GameManager instance;

@@ -2,6 +2,12 @@
 
 using SFML.Graphics;
 
+/// <summary>
+/// This class manages the Screens used in the application, and handles 
+/// the if a screen needs to change. 
+/// 
+/// And its a singleton
+/// </summary>
 public class ScreenManager
 {
     private static ScreenManager instance;
@@ -15,15 +21,27 @@ public class ScreenManager
         }
     }
 
+    /// <summary>
+    /// The Current Screen
+    /// </summary>
+    /// <value>The Screen</value>
     public Screen CurrentScreen { get; private set; }
 
     private ScreenManager() { }
 
+    /// <summary>
+    /// Change the current screen
+    /// </summary>
+    /// <param name="screen"></param>
     public void ChangeScreen(Screen screen)
     {
         CurrentScreen = screen;
     }
 
+    /// <summary>
+    /// Update the screen
+    /// </summary>
+    /// <param name="deltaTime"></param>
     public void Update(float deltaTime)
     {
         if (CurrentScreen == null)
@@ -32,6 +50,11 @@ public class ScreenManager
         CurrentScreen.Update(deltaTime);
     }
 
+    /// <summary>
+    /// Render the screen
+    /// </summary>
+    /// <param name="renderTarget">The RenderTarget the screen should 
+    /// render to</param>
     public void Render(RenderTarget renderTarget)
     {
         if (CurrentScreen == null)

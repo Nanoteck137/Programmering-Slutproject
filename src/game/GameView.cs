@@ -3,6 +3,9 @@
 using SFML.System;
 using SFML.Graphics;
 
+/// <summary>
+/// This class handles how the game is renderered to the user
+/// </summary>
 public class GameView
 {
     public GameModel Model { get; private set; }
