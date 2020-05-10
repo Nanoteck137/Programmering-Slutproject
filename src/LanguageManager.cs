@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 
 /// <summary>
 /// This class holds infomation about a language used in the program
@@ -98,6 +99,28 @@ public class LanguageManager
     {
         // Initialize the dicationary
         languages = new Dictionary<string, Language>();
+
+        string path = Path.Join(Directory.GetCurrentDirectory(), "res", "lang");
+        string[] files = Directory.GetFiles(path);
+
+        LanguageParser parser = new LanguageParser();
+
+        foreach (string file in files)
+        {
+            string languageName = Path.GetFileNameWithoutExtension(file);
+            Dictionary<string, string> translations = parser.ParseFile(file);
+
+            Language language = new Language(languageName);
+            foreach (var translation in translations)
+            {
+                language.AddTranslation(translation.Key, translation.Value);
+            }
+
+            if (languageName == "common")
+                CommonLanguage = language;
+            else
+                AddLanguage(language);
+        }
     }
 
     /// <summary>
@@ -166,10 +189,15 @@ public class LanguageManager
         if (result == null && commonLanguage != null)
             result = commonLanguage.GetTranslation(key);
 
-        // If we don't get a translation at all then do an assert
-        Debug.Assert(result != null,
-            string.Format("'{0}' has no translation for '{1}'",
-                          currentLanguage.Name, key));
+        // If we still don't get a translation then return the key as 
+        // the translation, and send a warning that the key has no 
+        // translation associated with it
+        if (result == null)
+        {
+            Console.WriteLine("Warning: '{0}' has no translation for '{1}'",
+                              currentLanguage.Name, key);
+            return key;
+        }
 
         return result;
     }

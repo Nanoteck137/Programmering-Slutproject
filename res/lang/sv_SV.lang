@@ -1,0 +1,14 @@
+window.title = Bästa Pong
+
+mainmenu.title = Bästa Pong
+mainmenu.playbutton = Spela spelet
+mainmenu.customizationbutton = Anpassa
+mainmenu.settingsbutton = Inställningar
+mainmenu.quitbutton = Avsluta
+
+customize.title = Anpassa
+customize.backbutton = Tillbacka
+
+settings.title = Inställningar
+settings.changelanguagetitle = Ändra Språk
+settings.backbutton = Tillbacka

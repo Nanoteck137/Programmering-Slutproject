@@ -51,7 +51,7 @@ public class UISkinSelector
                                       new Vector2f(
                                             CHANGE_BUTTON_WIDTH,
                                             CHANGE_BUTTON_HEIGHT),
-                                      "skinselector.left", 25, font);
+                                      "<", 25, font);
 
         // Register the callback when the button is clicked on
         skinChangeLeft.RegisterOnClickAciton(OnSkinChangeLeft);
@@ -63,7 +63,7 @@ public class UISkinSelector
                                        new Vector2f(
                                             CHANGE_BUTTON_WIDTH,
                                             CHANGE_BUTTON_HEIGHT),
-                                       "skinselector.right", 25, font);
+                                       ">", 25, font);
 
         // Register the callback when the button is clicked on
         skinChangeRight.RegisterOnClickAciton(OnSkinChangeRight);

@@ -108,10 +108,10 @@ public class Application
         seSE.AddTranslation("settings.backbutton", "Tillbacka");
 
         // TODO(patrik): Move this to a better place
-        LanguageManager.Instance.CommonLanguage = common;
-        LanguageManager.Instance.AddLanguage(enUS);
-        LanguageManager.Instance.AddLanguage(seSE);
-        LanguageManager.Instance.SetCurrentLanguage("se-SE");
+        // LanguageManager.Instance.CommonLanguage = common;
+        // LanguageManager.Instance.AddLanguage(enUS);
+        // LanguageManager.Instance.AddLanguage(seSE);
+        LanguageManager.Instance.SetCurrentLanguage("en_US");
 
         Styles windowStyle = Styles.Titlebar | Styles.Close;
 
