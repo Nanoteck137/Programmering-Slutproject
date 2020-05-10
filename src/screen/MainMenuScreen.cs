@@ -15,11 +15,13 @@ public class MainMenuScreen : Screen
     // The title for the main menu
     private Text title;
 
-    // List for all the buttons in the main menu
-    private List<UIButton> menuButtons;
+    // Dictionary to store the translation key and the buttons, 
+    // used to update and render but also when the language is changed 
+    // so we can get the right translation for the button 
+    private Dictionary<string, UIButton> menuButtons;
 
     // The width of a Menu button
-    private const float BUTTON_WIDTH = 240;
+    private const float BUTTON_WIDTH = 290;
     // The height of a Menu button
     private const float BUTTON_HEIGHT = 60;
     // The margin between buttons in the Y axis
@@ -30,8 +32,8 @@ public class MainMenuScreen : Screen
 
     public MainMenuScreen()
     {
-        // Initialize the `menuButtons` list
-        menuButtons = new List<UIButton>();
+        // Initialize the `menuButtons` dictionary
+        menuButtons = new Dictionary<string, UIButton>();
 
         // Create and load the `font` used in the game
         font = new Font("res/fonts/font.ttf");
@@ -44,13 +46,19 @@ public class MainMenuScreen : Screen
                                           windowSize.Y / 2.0f);
 
         // Create some buttons for the menu
-        CreateMenuButton("Play Game", 20, OnPlayButtonClicked);
-        CreateMenuButton("Customize", 20, OnCustomizeButtonClicked);
-        CreateMenuButton("Settings", 20, OnSettingsButtonClicked);
-        CreateMenuButton("Quit Game", 20, OnQuitButtonClicked);
+        CreateMenuButton("mainmenu.playbutton", 20, OnPlayButtonClicked);
+        CreateMenuButton("mainmenu.customizationbutton", 20,
+                         OnCustomizeButtonClicked);
+        CreateMenuButton("mainmenu.settingsbutton", 20,
+                         OnSettingsButtonClicked);
+        CreateMenuButton("mainmenu.quitbutton", 20, OnQuitButtonClicked);
 
         // Create the title
         CreateTitle();
+
+        // Register a language changed callback
+        LanguageManager.Instance.RegisterOnLanguageChangedCallback(
+            OnLanguageChanged);
     }
 
     private void CreateTitle()
@@ -59,7 +67,8 @@ public class MainMenuScreen : Screen
         Vector2u windowSize = Application.Instance.Window.Size;
 
         // Create the text and set the character size
-        title = new Text("The Best Pong", font);
+        title = new Text(
+            LanguageManager.Instance.GetTranslation("mainmenu.title"), font);
         title.CharacterSize = 50;
 
         // Get the bounds for the text
@@ -71,9 +80,10 @@ public class MainMenuScreen : Screen
         title.Position = new Vector2f(windowSize.X / 2.0f, 160.0f);
     }
 
-    private void CreateMenuButton(string text, uint textSize,
+    private void CreateMenuButton(string textKey, uint textSize,
                                   Action clickAction)
     {
+        string text = LanguageManager.Instance.GetTranslation(textKey);
         // Create the button
         UIButton button = new UIButton(nextButtonPosition,
                                        new Vector2f(BUTTON_WIDTH,
@@ -84,11 +94,31 @@ public class MainMenuScreen : Screen
         button.RegisterOnClickAciton(clickAction);
 
         // Add the button to the list
-        menuButtons.Add(button);
+        menuButtons.Add(textKey, button);
 
         // Update the `nextButtonPosition` so the next button 
         // can sit under this one
         nextButtonPosition.Y += BUTTON_HEIGHT + BUTTON_Y_MARGIN;
+    }
+
+    private void OnLanguageChanged()
+    {
+        // Update the title with the new translation
+        title.DisplayedString =
+            LanguageManager.Instance.GetTranslation("mainmenu.title");
+
+        // Get the bounds for the text for the new text
+        FloatRect rect = title.GetLocalBounds();
+        // Set the origin to the center of the text
+        title.Origin = new Vector2f(rect.Width / 2, rect.Height / 2);
+
+        // Loop through the buttons and update the content for the new language
+        foreach (var button in menuButtons)
+        {
+            // Get and set the new translation for the button
+            button.Value.Text =
+                LanguageManager.Instance.GetTranslation(button.Key);
+        }
     }
 
     private void OnPlayButtonClicked()
@@ -118,8 +148,8 @@ public class MainMenuScreen : Screen
     public override void Update(float deltaTime)
     {
         // Update all the menu buttons
-        foreach (UIButton button in menuButtons)
-            button.Update(deltaTime);
+        foreach (var button in menuButtons)
+            button.Value.Update(deltaTime);
     }
 
     public override void Render(RenderTarget renderTarget)
@@ -128,8 +158,8 @@ public class MainMenuScreen : Screen
         renderTarget.Draw(title);
 
         // Render all the menu buttons
-        foreach (UIButton button in menuButtons)
-            button.Render(renderTarget);
+        foreach (var button in menuButtons)
+            button.Value.Render(renderTarget);
     }
 
 

@@ -33,8 +33,6 @@ public class Application
     private GameScreen gameScreen;
     public GameScreen GameScreen { get { return gameScreen; } }
 
-    private Text testText;
-
     // Store the state if the application is running, and chaging this 
     // to false when the application is running should exit the app
     private bool running = false;
@@ -45,18 +43,49 @@ public class Application
     /// </summary>
     public Application()
     {
-        // Check if there is another instance, becuase there should not be one
+        // Check if there is another instance, becuase there should never be one
         Debug.Assert(instance == null);
 
         // Set the instance to this class because it should 
         // only be one instance
         instance = this;
 
+        // TODO(patrik): Move this to a better place
+        Language enUS = new Language("en-US");
+        enUS.AddTranslation("window.title", "The Best Pong");
+
+        enUS.AddTranslation("mainmenu.title", "The Best Pong");
+        enUS.AddTranslation("mainmenu.playbutton", "Play Game");
+        enUS.AddTranslation("mainmenu.customizationbutton", "Customize");
+        enUS.AddTranslation("mainmenu.settingsbutton", "Settings");
+        enUS.AddTranslation("mainmenu.quitbutton", "Quit Game");
+
+        enUS.AddTranslation("customize.title", "Customize");
+        enUS.AddTranslation("customize.backbutton", "Back");
+
+        // TODO(patrik): Move this to a better place
+        Language seSE = new Language("se-SE");
+        seSE.AddTranslation("window.title", "Bästa Pong");
+
+        seSE.AddTranslation("mainmenu.title", "Bästa Pong");
+        seSE.AddTranslation("mainmenu.playbutton", "Spela spelet");
+        seSE.AddTranslation("mainmenu.customizationbutton", "Anpassa");
+        seSE.AddTranslation("mainmenu.settingsbutton", "Inställningar");
+        seSE.AddTranslation("mainmenu.quitbutton", "Avsluta");
+
+        seSE.AddTranslation("customize.title", "Anpassa");
+        seSE.AddTranslation("customize.backbutton", "Tillbacka");
+
+        // TODO(patrik): Move this to a better place
+        LanguageManager.Instance.AddLanguage(enUS);
+        LanguageManager.Instance.AddLanguage(seSE);
+        LanguageManager.Instance.SetCurrentLanguage("se-SE");
+
         Styles windowStyle = Styles.Titlebar | Styles.Close;
 
         // Create a RenderWindow and setup the event callbacks
         Window = new RenderWindow(new VideoMode(1280, 720),
-                                  "Best Pong", windowStyle);
+                                  LanguageManager.Instance.GetTranslation("window.title"), windowStyle);
 
         // Register some callbacks
         Window.Closed += this.Window_Closed;
@@ -77,35 +106,18 @@ public class Application
         SkinManager.Instance.AddSkin(new Skin(Color.Red));
         SkinManager.Instance.AddSkin(new Skin(Color.Blue));
 
-
-
-        Language enUS = new Language("en-US");
-        enUS.AddTranslation("mainmenu.title", "The Best Pong");
-        enUS.AddTranslation("mainmenu.playbutton", "Play Game");
-        enUS.AddTranslation("mainmenu.customizationbutton", "Customization");
-        enUS.AddTranslation("mainmenu.settingsbutton", "Settings");
-        enUS.AddTranslation("mainmenu.quitbutton", "Quit Game");
-
-        Language seSE = new Language("se-SE");
-        seSE.AddTranslation("mainmenu.title", "Svenska är bra");
-        seSE.AddTranslation("mainmenu.playbutton", "Play Game");
-        seSE.AddTranslation("mainmenu.customizationbutton", "Customization");
-        seSE.AddTranslation("mainmenu.settingsbutton", "Settings");
-        seSE.AddTranslation("mainmenu.quitbutton", "Quit Game");
-
-        LanguageManager.Instance.AddLanguage(enUS);
-        LanguageManager.Instance.AddLanguage(seSE);
-        LanguageManager.Instance.SetCurrentLanguage("en-US");
-
-        Font font = new Font("res/fonts/font.ttf");
-        testText = new Text(LanguageManager.Instance.GetTranslation("mainmenu.title"), font);
-
+        // Register a language changed callback
         LanguageManager.Instance.RegisterOnLanguageChangedCallback(OnLanguageChanged);
     }
 
+    /// <summary>
+    /// Called when the language is changed so we can update the text 
+    /// inside objects
+    /// </summary>
     private void OnLanguageChanged()
     {
-        testText.DisplayedString = LanguageManager.Instance.GetTranslation("mainmenu.title");
+        Window.SetTitle(
+            LanguageManager.Instance.GetTranslation("window.title"));
     }
 
     /// <summary>
@@ -158,8 +170,6 @@ public class Application
                 Console.WriteLine("Changing the language to 'se-SE'");
                 LanguageManager.Instance.SetCurrentLanguage("se-SE");
             }
-
-            Window.Draw(testText);
 
             // Display the contents to the window
             Window.Display();

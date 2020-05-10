@@ -33,6 +33,9 @@ public class CustomizeScreen : Screen
 
         // Create the skin selectors
         CreateSkinSelectors();
+
+        LanguageManager.Instance.RegisterOnLanguageChangedCallback(
+            OnLanguageChanged);
     }
 
     private void CreateTitle()
@@ -41,7 +44,8 @@ public class CustomizeScreen : Screen
         Vector2u windowSize = Application.Instance.Window.Size;
 
         // Create the text and set the character size
-        title = new Text("Customize", font);
+        title = new Text(
+            LanguageManager.Instance.GetTranslation("customize.title"), font);
         title.CharacterSize = 50;
 
         // Get the bounds for the text
@@ -58,11 +62,14 @@ public class CustomizeScreen : Screen
         // Get the window size
         Vector2u windowSize = Application.Instance.Window.Size;
 
+        string text =
+            LanguageManager.Instance.GetTranslation("customize.backbutton");
+
         // Create the back button
         backButton = new UIButton(new Vector2f(windowSize.X / 2.0f,
                                                windowSize.Y - 120.0f),
                                   new Vector2f(240.0f, 60.0f),
-                                  "Back", 20, font);
+                                  text, 20, font);
 
         // Register the back button click callback
         backButton.RegisterOnClickAciton(OnBackButtonClicked);
@@ -86,6 +93,21 @@ public class CustomizeScreen : Screen
                                         windowSize.X / 2.0f + 350.0f,
                                         windowSize.Y / 2.0f),
                                     font);
+    }
+
+    private void OnLanguageChanged()
+    {
+        // Set the title to the new translation
+        title.DisplayedString =
+            LanguageManager.Instance.GetTranslation("customize.title");
+
+        // Get the bounds of the text
+        FloatRect rect = title.GetLocalBounds();
+        // Set the origin to the center of the text
+        title.Origin = new Vector2f(rect.Width / 2, rect.Height / 2);
+
+        backButton.Text =
+            LanguageManager.Instance.GetTranslation("customize.backbutton");
     }
 
     private void OnBackButtonClicked()

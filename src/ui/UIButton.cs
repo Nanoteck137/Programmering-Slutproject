@@ -16,6 +16,20 @@ class UIButton
     // A Text Object used to render text in SFML
     private Text text;
 
+    public string Text
+    {
+        get
+        {
+            return text.DisplayedString;
+        }
+
+        set
+        {
+            text.DisplayedString = value;
+            UpdateText();
+        }
+    }
+
     // Action used for if the button is clicked on then the button can 
     // send out an event to the registered users
     private Action onClickAction;
@@ -42,11 +56,14 @@ class UIButton
         this.text = new Text(text, font);
         this.text.CharacterSize = textSize;
 
-        Vector2f textPos = position;
-        FloatRect rect = this.text.GetLocalBounds();
+        UpdateText();
+        this.text.Position = position;
+    }
 
+    private void UpdateText()
+    {
+        FloatRect rect = this.text.GetLocalBounds();
         this.text.Origin = new Vector2f(rect.Width / 2.0f, rect.Height / 2.0f);
-        this.text.Position = textPos;
     }
 
     /// <summary>
