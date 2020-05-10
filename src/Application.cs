@@ -23,6 +23,11 @@ public class Application
     private MainMenuScreen mainMenuScreen;
     public MainMenuScreen MainMenuScreen { get { return mainMenuScreen; } }
 
+    // Store the CustomizeScreen so we don't need to create a new one 
+    // always when changing screens
+    private CustomizeScreen customizeScreen;
+    public CustomizeScreen CustomizeScreen { get { return customizeScreen; } }
+
     // Store the GameScreen so we don't need to create a new one 
     // always when changing screens
     private GameScreen gameScreen;
@@ -40,6 +45,7 @@ public class Application
     {
         // Check if there is another instance, becuase there should not be one
         Debug.Assert(instance == null);
+
         // Set the instance to this class because it should 
         // only be one instance
         instance = this;
@@ -47,6 +53,7 @@ public class Application
         // Create a RenderWindow and setup the event callbacks
         Window = new RenderWindow(new VideoMode(1280, 720),
                                   "Best Pong", Styles.Default);
+        // Register some callbacks
         Window.Closed += this.Window_Closed;
         Window.KeyPressed += this.Window_KeyPressed;
         Window.KeyReleased += this.Window_KeyReleased;
@@ -54,11 +61,16 @@ public class Application
         Window.MouseButtonReleased += this.Window_MouseButtonReleased;
 
         // Create the screens used by this application
-        gameScreen = new GameScreen();
         mainMenuScreen = new MainMenuScreen();
+        customizeScreen = new CustomizeScreen();
+        gameScreen = new GameScreen();
 
         // Change the screen to the MainMenu
         ScreenManager.Instance.ChangeScreen(mainMenuScreen);
+
+        SkinManager.Instance.AddSkin(new Skin(Color.White));
+        SkinManager.Instance.AddSkin(new Skin(Color.Red));
+        SkinManager.Instance.AddSkin(new Skin(Color.Blue));
     }
 
     /// <summary>

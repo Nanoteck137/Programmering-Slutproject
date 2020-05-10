@@ -31,6 +31,10 @@ public class GameView
     public void Render(RenderTarget renderTarget)
     {
         leftPaddle.Position = Model.LeftPaddle.Position;
+
+        Skin skin = SkinManager.Instance.GetSkinFromID(Model.LeftPaddle.SkinID);
+        leftPaddle.FillColor = skin.Color;
+
         renderTarget.Draw(leftPaddle);
 
         rightPaddle.Position = Model.RightPaddle.Position;

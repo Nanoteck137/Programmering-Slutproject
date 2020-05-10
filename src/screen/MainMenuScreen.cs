@@ -12,6 +12,9 @@ public class MainMenuScreen : Screen
     // The font used in the main menu
     private Font font;
 
+    // The title for the main menu
+    private Text title;
+
     // List for all the buttons in the main menu
     private List<UIButton> menuButtons;
 
@@ -44,6 +47,27 @@ public class MainMenuScreen : Screen
         CreateMenuButton("Play Game", 20, OnPlayButtonClicked);
         CreateMenuButton("Customize", 20, OnCustomizeButtonClicked);
         CreateMenuButton("Quit Game", 20, OnQuitButtonClicked);
+
+        // Create the title
+        CreateTitle();
+    }
+
+    private void CreateTitle()
+    {
+        // Get the window size
+        Vector2u windowSize = Application.Instance.Window.Size;
+
+        // Create the text and set the character size
+        title = new Text("The Best Pong", font);
+        title.CharacterSize = 50;
+
+        // Get the bounds for the text
+        FloatRect rect = title.GetLocalBounds();
+        // Set the origin to the center of the text
+        title.Origin = new Vector2f(rect.Width / 2, rect.Height / 2);
+
+        // Set the position of the title
+        title.Position = new Vector2f(windowSize.X / 2.0f, 160.0f);
     }
 
     private void CreateMenuButton(string text, uint textSize,
@@ -68,13 +92,15 @@ public class MainMenuScreen : Screen
 
     private void OnPlayButtonClicked()
     {
+        // Change the screen to the gameplay screen
         ScreenManager.Instance.ChangeScreen(Application.Instance.GameScreen);
     }
 
     private void OnCustomizeButtonClicked()
     {
-        // TODO(patrik): Change the screen to the customize screen
-        Console.WriteLine("Customize Button clicked");
+        // Change the screen to the customize screen
+        ScreenManager.Instance.ChangeScreen(
+            Application.Instance.CustomizeScreen);
     }
 
     private void OnQuitButtonClicked()
@@ -92,6 +118,9 @@ public class MainMenuScreen : Screen
 
     public override void Render(RenderTarget renderTarget)
     {
+        // Render the title
+        renderTarget.Draw(title);
+
         // Render all the menu buttons
         foreach (UIButton button in menuButtons)
             button.Render(renderTarget);
