@@ -4,6 +4,7 @@ using SFML.Window;
 using SFML.Graphics;
 using SFML.System;
 using System.Diagnostics;
+using System.Collections.Generic;
 
 /// <summary>
 /// This class is used to manage the lifetime of the game and it's components
@@ -56,6 +57,13 @@ public class Application
         // Set the instance to this class because it should 
         // only be one instance
         instance = this;
+
+        LanguageParser parser = new LanguageParser();
+        Dictionary<string, string> translations = parser.ParseFile("res/lang/en_US.lang");
+        foreach (var translation in translations)
+        {
+            Console.WriteLine("Translation: {0} = {1}", translation.Key, translation.Value);
+        }
 
         // TODO(patrik): Move this to a better place
         Language common = new Language("common");

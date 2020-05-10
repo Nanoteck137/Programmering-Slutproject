@@ -1,0 +1,14 @@
+window.title = The Best Pong
+
+mainmenu.title = The Best Pong
+mainmenu.playbutton = Play Game
+mainmenu.customizationbutton = Customize
+mainmenu.settingsbutton = Settings
+mainmenu.quitbutton = Quit Game
+
+customize.title = Customize
+customize.backbutton = Back
+
+settings.title = Settings
+settings.changelanguagetitle = Change Language
+settings.backbutton = Back
