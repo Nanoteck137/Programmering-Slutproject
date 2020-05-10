@@ -16,31 +16,33 @@ public class Application
     public static Application Instance { get { return instance; } }
 
     // The SFML RenderWindow used for the rendering of the application
-    public RenderWindow Window { get; private set; }
+    private RenderWindow window;
 
     // Store the MainMenuScreen so we don't need to create a new one 
     // always when changing screens
     private MainMenuScreen mainMenuScreen;
-    public MainMenuScreen MainMenuScreen { get { return mainMenuScreen; } }
 
     // Store the CustomizeScreen so we don't need to create a new one 
     // always when changing screens
     private CustomizeScreen customizeScreen;
-    public CustomizeScreen CustomizeScreen { get { return customizeScreen; } }
 
     // Store the GameScreen so we don't need to create a new one 
     // always when changing screens
     private GameScreen gameScreen;
-    public GameScreen GameScreen { get { return gameScreen; } }
 
     // Store the SettingsScreen so we don't need to create a new one 
     // always when changing screens
     private SettingsScreen settingsScreen;
-    public SettingsScreen SettingsScreen { get { return settingsScreen; } }
 
     // Store the state if the application is running, and chaging this 
     // to false when the application is running should exit the app
     private bool running = false;
+
+    public RenderWindow Window { get { return window; } }
+    public MainMenuScreen MainMenuScreen { get { return mainMenuScreen; } }
+    public CustomizeScreen CustomizeScreen { get { return customizeScreen; } }
+    public GameScreen GameScreen { get { return gameScreen; } }
+    public SettingsScreen SettingsScreen { get { return settingsScreen; } }
 
     /// <summary>
     /// The constructor for the application, initialize all the components 
@@ -105,16 +107,18 @@ public class Application
 
         Styles windowStyle = Styles.Titlebar | Styles.Close;
 
+        string windowTitle = LanguageManager.Instance.GetTranslation("window.title");
+
         // Create a RenderWindow and setup the event callbacks
-        Window = new RenderWindow(new VideoMode(1280, 720),
-                                  LanguageManager.Instance.GetTranslation("window.title"), windowStyle);
+        window = new RenderWindow(new VideoMode(1280, 720),
+                                  windowTitle, windowStyle);
 
         // Register some callbacks
-        Window.Closed += this.Window_Closed;
-        Window.KeyPressed += this.Window_KeyPressed;
-        Window.KeyReleased += this.Window_KeyReleased;
-        Window.MouseButtonPressed += this.Window_MouseButtonPressed;
-        Window.MouseButtonReleased += this.Window_MouseButtonReleased;
+        window.Closed += this.Window_Closed;
+        window.KeyPressed += this.Window_KeyPressed;
+        window.KeyReleased += this.Window_KeyReleased;
+        window.MouseButtonPressed += this.Window_MouseButtonPressed;
+        window.MouseButtonReleased += this.Window_MouseButtonReleased;
 
         // Create the screens used by this application
         mainMenuScreen = new MainMenuScreen();
@@ -125,6 +129,7 @@ public class Application
         // Change the screen to the MainMenu
         ScreenManager.Instance.ChangeScreen(mainMenuScreen);
 
+        // TODO(patrik): Move this!?!?
         SkinManager.Instance.AddSkin(new Skin(Color.White));
         SkinManager.Instance.AddSkin(new Skin(Color.Red));
         SkinManager.Instance.AddSkin(new Skin(Color.Blue));
@@ -171,31 +176,20 @@ public class Application
 
             // Dispatch the window events to the callback registered 
             // in the constructor
-            Window.DispatchEvents();
+            window.DispatchEvents();
 
             // Clear the window
-            Window.Clear(Color.Black);
+            window.Clear(Color.Black);
 
             // Update and Render the SceneManager
             ScreenManager.Instance.Update(deltaTime);
-            ScreenManager.Instance.Render(Window);
+            ScreenManager.Instance.Render(window);
 
             // Update the GameManager
             GameManager.Instance.Update(deltaTime);
 
-            if (Input.Instance.IsKeyPressed(Keyboard.Key.Num1))
-            {
-                Console.WriteLine("Changing the language to 'en-US'");
-                LanguageManager.Instance.SetCurrentLanguage("en-US");
-            }
-            else if (Input.Instance.IsKeyPressed(Keyboard.Key.Num2))
-            {
-                Console.WriteLine("Changing the language to 'se-SE'");
-                LanguageManager.Instance.SetCurrentLanguage("se-SE");
-            }
-
             // Display the contents to the window
-            Window.Display();
+            window.Display();
 
             // Update the input last so the keys gets updated 
             // in the right order
@@ -203,7 +197,7 @@ public class Application
         }
 
         clock.Dispose();
-        Window.Dispose();
+        window.Dispose();
     }
 
     private void Window_Closed(object sender, EventArgs e)
