@@ -21,9 +21,12 @@ public class Application
     // Store the MainMenuScreen so we don't need to create a new one 
     // always when changing screens
     private MainMenuScreen mainMenuScreen;
+    public MainMenuScreen MainMenuScreen { get { return mainMenuScreen; } }
+
     // Store the GameScreen so we don't need to create a new one 
     // always when changing screens
     private GameScreen gameScreen;
+    public GameScreen GameScreen { get { return gameScreen; } }
 
     // Store the state if the application is running, and chaging this 
     // to false when the application is running should exit the app
@@ -45,6 +48,8 @@ public class Application
         Window = new RenderWindow(new VideoMode(1280, 720),
                                   "Best Pong", Styles.Default);
         Window.Closed += this.Window_Closed;
+        Window.KeyPressed += this.Window_KeyPressed;
+        Window.KeyReleased += this.Window_KeyReleased;
         Window.MouseButtonPressed += this.Window_MouseButtonPressed;
         Window.MouseButtonReleased += this.Window_MouseButtonReleased;
 
@@ -104,6 +109,7 @@ public class Application
             Input.Instance.Update();
         }
 
+        clock.Dispose();
         Window.Dispose();
     }
 
@@ -111,6 +117,16 @@ public class Application
     {
         // When the window wants to be closed, just exit the game
         ExitGame();
+    }
+
+    private void Window_KeyPressed(object sender, KeyEventArgs e)
+    {
+        Input.Instance.SetKeyState((int)e.Code, true);
+    }
+
+    private void Window_KeyReleased(object sender, KeyEventArgs e)
+    {
+        Input.Instance.SetKeyState((int)e.Code, false);
     }
 
     private void Window_MouseButtonPressed(object sender,

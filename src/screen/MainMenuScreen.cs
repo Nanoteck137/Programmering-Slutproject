@@ -70,6 +70,8 @@ public class MainMenuScreen : Screen
     {
         // TODO(patrik): Change the screen to the gameplay
         Console.WriteLine("Play Button clicked");
+
+        ScreenManager.Instance.ChangeScreen(Application.Instance.GameScreen);
     }
 
     private void OnCustomizeButtonClicked()
@@ -97,4 +99,6 @@ public class MainMenuScreen : Screen
         foreach (UIButton button in menuButtons)
             button.Render(renderTarget);
     }
+
+
 }

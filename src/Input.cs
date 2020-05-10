@@ -26,32 +26,104 @@ class Input
     public const int XBUTTON1_BUTTON = 3;
     public const int XBUTTON2_BUTTON = 4;
 
-    // `mouseButtonState` is used to store the current 
-    // frame mouse button states for all the buttons on the mouse 
-    private bool[] mouseButtonState;
+    // `keyStates` is used to store the current frame keyboard state
+    private bool[] keyStates;
+    // `keyStates` is used to store the previous frame keyboard state
+    private bool[] prevKeyStates;
 
-    // `prevMouseButtonState` is used to store the previous 
+    // `mouseButtonStates` is used to store the current 
+    // frame mouse button states for all the buttons on the mouse 
+    private bool[] mouseButtonStates;
+
+    // `prevMouseButtonStates` is used to store the previous 
     // frame mouse button states for all the buttons on the mouse
-    private bool[] prevMouseButtonState;
+    private bool[] prevMouseButtonStates;
 
     private Input()
     {
+        // Get how many keys SFML supports
+        int keyStateCount = (int)Keyboard.Key.KeyCount;
+
+        // Initialize the key state arrys with the key count from SFML
+        keyStates = new bool[keyStateCount];
+        prevKeyStates = new bool[keyStateCount];
+
+
         // Get how many buttons SFML supports
         int buttonStateCount = (int)Mouse.Button.ButtonCount;
 
-        // Initializes `mouseButtonState` and `prevMouseButtonState` 
+        // Initializes `mouseButtonStates` and `prevMouseButtonStates` 
         // the Button State arrays with the number of buttons SFML supports
-        mouseButtonState = new bool[buttonStateCount];
-        prevMouseButtonState = new bool[buttonStateCount];
+        mouseButtonStates = new bool[buttonStateCount];
+        prevMouseButtonStates = new bool[buttonStateCount];
     }
 
     public void Update()
     {
-        // loop through the `mouseButtonState` and setting the 
-        // `prevMouseButtonState` to it's state so we can detect if a mouse 
+        // loop through the `keyStates` and setting the 
+        // `prevKeyStates` to it's state so we can detect if a 
+        // keyboard key has been down for more then one frame
+        for (int i = 0; i < keyStates.Length; i++)
+            prevKeyStates[i] = keyStates[i];
+
+        // loop through the `mouseButtonStates` and setting the 
+        // `prevMouseButtonStates` to it's state so we can detect if a mouse 
         // button has been down for more then one frame
-        for (int i = 0; i < mouseButtonState.Length; i++)
-            prevMouseButtonState[i] = mouseButtonState[i];
+        for (int i = 0; i < mouseButtonStates.Length; i++)
+            prevMouseButtonStates[i] = mouseButtonStates[i];
+    }
+
+    /// <summary>
+    /// Change the state of a key
+    /// </summary>
+    /// <param name="key">The key that should change state</param>
+    /// <param name="state">The new state for the key</param>
+    public void SetKeyState(int key, bool state)
+    {
+        keyStates[key] = state;
+    }
+
+    /// <summary>
+    /// Check if the key is down in the current frame
+    /// </summary>
+    /// <param name="key">The key to check</param>
+    /// <returns>Returns true if the key is down this frame</returns>
+    public bool IsKeyDown(int key)
+    {
+        return keyStates[key];
+    }
+
+    /// <summary>
+    /// Wrapper to convert from a SFML key
+    /// </summary>
+    /// <param name="key">The SFML key</param>
+    /// <returns>Returns true if the key is down this frame</returns>
+    public bool IsKeyDown(Keyboard.Key key)
+    {
+        return IsKeyDown((int)key);
+    }
+
+    /// <summary>
+    /// Check if the key is down in the current frame and check if 
+    /// the key was down the previous frame
+    /// </summary>
+    /// <param name="key">The key to check</param>
+    /// <returns>Returns true if the key is down this frame 
+    /// and the key was not down the previous frame</returns>
+    public bool IsKeyPressed(int key)
+    {
+        return keyStates[key] && !prevKeyStates[key];
+    }
+
+    /// <summary>
+    /// Wrapper to convert from a SFML key
+    /// </summary>
+    /// <param name="key">SFML key</param>
+    /// <returns>Returns true if the key is down this frame 
+    /// and the key was not down the previous frame</returns>
+    public bool IsKeyPressed(Keyboard.Key key)
+    {
+        return IsKeyPressed((int)key);
     }
 
     /// <summary>
@@ -61,8 +133,8 @@ class Input
     /// <param name="state">The state the button should have</param>
     public void SetButtonState(int button, bool state)
     {
-        // Set the index in `mouseButtonState` to the right state
-        mouseButtonState[button] = state;
+        // Set the index in `mouseButtonStates` to the right state
+        mouseButtonStates[button] = state;
     }
 
     /// <summary>
@@ -73,7 +145,7 @@ class Input
     public bool IsButtonDown(int button)
     {
         // Check if the button state is true for this frame
-        return mouseButtonState[button];
+        return mouseButtonStates[button];
     }
 
     /// <summary>
@@ -86,6 +158,6 @@ class Input
     {
         // Check if the button state is true and check if the button was 
         // down the previous frame
-        return mouseButtonState[button] && !prevMouseButtonState[button];
+        return mouseButtonStates[button] && !prevMouseButtonStates[button];
     }
 }

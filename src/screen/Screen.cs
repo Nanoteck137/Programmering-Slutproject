@@ -7,6 +7,10 @@ using SFML.Graphics;
 /// </summary>
 public abstract class Screen
 {
+    public virtual void OnScreenShow() { }
+    public virtual void OnScreenHide() { }
+
+
     /// <summary>
     /// Update the screen
     /// </summary>

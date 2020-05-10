@@ -1,4 +1,6 @@
 ﻿using System;
+
+using SFML.Window;
 using SFML.Graphics;
 
 /// <summary>
@@ -15,8 +17,19 @@ public class GameScreen : Screen
         View = new GameView(GameManager.Instance.Model);
     }
 
+    public override void OnScreenShow()
+    {
+        GameManager.Instance.NewGame();
+    }
+
+    public override void OnScreenHide() { }
+
     public override void Update(float deltaTime)
     {
+        if (Input.Instance.IsKeyPressed(Keyboard.Key.Escape))
+        {
+            ScreenManager.Instance.ChangeScreen(Application.Instance.MainMenuScreen);
+        }
     }
 
     public override void Render(RenderTarget renderTarget)
