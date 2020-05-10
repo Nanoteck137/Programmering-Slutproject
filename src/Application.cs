@@ -56,6 +56,14 @@ public class Application
         instance = this;
 
         // TODO(patrik): Move this to a better place
+        Language common = new Language("common");
+        common.AddTranslation("skinselector.left", "<");
+        common.AddTranslation("skinselector.right", ">");
+
+        common.AddTranslation("en-US", "English (US)");
+        common.AddTranslation("se-SE", "Svenska");
+
+        // TODO(patrik): Move this to a better place
         Language enUS = new Language("en-US");
         enUS.AddTranslation("window.title", "The Best Pong");
 
@@ -90,6 +98,7 @@ public class Application
         seSE.AddTranslation("settings.backbutton", "Tillbacka");
 
         // TODO(patrik): Move this to a better place
+        LanguageManager.Instance.CommonLanguage = common;
         LanguageManager.Instance.AddLanguage(enUS);
         LanguageManager.Instance.AddLanguage(seSE);
         LanguageManager.Instance.SetCurrentLanguage("se-SE");

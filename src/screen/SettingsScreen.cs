@@ -83,7 +83,7 @@ public class SettingsScreen : Screen
             UIButton button = new UIButton(
                                     new Vector2f(windowSize.X / 2.0f,
                                                  windowSize.Y / 2.0f + nextY),
-                                    new Vector2f(240.0f, 60.0f),
+                                    new Vector2f(300.0f, 60.0f),
                                     languageName,
                                     20,
                                     font);
@@ -111,32 +111,14 @@ public class SettingsScreen : Screen
         // Get the window size
         Vector2u windowSize = Application.Instance.Window.Size;
 
-        // Get the current translation for the back button
-        string text =
-            LanguageManager.Instance.GetTranslation("settings.backbutton");
-
         // Create the back button
         backButton = new UIButton(new Vector2f(windowSize.X / 2.0f,
                                                windowSize.Y - 120.0f),
                                   new Vector2f(240.0f, 60.0f),
-                                  text, 20, font);
+                                  "settings.backbutton", 20, font);
 
         // Register the back button click callback
         backButton.RegisterOnClickAciton(OnBackButtonClicked);
-
-        // Register the OnClick so the button can send the user back to 
-        // the main menu
-        LanguageManager.Instance.RegisterOnLanguageChangedCallback(
-            OnLanguageChanged);
-    }
-
-    /// <summary>
-    /// When the language changes update the translations
-    /// </summary>
-    private void OnLanguageChanged()
-    {
-        backButton.Text =
-            LanguageManager.Instance.GetTranslation("settings.backbutton");
     }
 
     /// <summary>

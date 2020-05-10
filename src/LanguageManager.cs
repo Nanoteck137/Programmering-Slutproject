@@ -46,9 +46,8 @@ public class Language
     /// <returns>Returns the translation</returns>
     public string GetTranslation(string key)
     {
-        Debug.Assert(translations.ContainsKey(key),
-                string.Format("'{0}' has no translation for '{1}'",
-                              this.name, key));
+        if (!translations.ContainsKey(key))
+            return null;
 
         return translations[key];
     }
@@ -75,8 +74,17 @@ public class LanguageManager
     // The language currently selected
     private Language currentLanguage;
 
+    // A common language to get common translations
+    private Language commonLanguage;
+
     // A dictionary holding languages by name
     private Dictionary<string, Language> languages;
+
+    public Language CommonLanguage
+    {
+        get { return commonLanguage; }
+        set { commonLanguage = value; }
+    }
 
     public Dictionary<string, Language> Languages
     {
@@ -147,7 +155,22 @@ public class LanguageManager
     /// <returns>Returns the translation for the key</returns>
     public string GetTranslation(string key)
     {
+        // Assert if we don't have selected a language
         Debug.Assert(currentLanguage != null, "No language selected");
-        return currentLanguage.GetTranslation(key);
+
+        // Try to get the translation from the current selected language 
+        string result = currentLanguage.GetTranslation(key);
+
+        // If we don't get a translation from the current selected 
+        // language then try to get a translation from the common language
+        if (result == null && commonLanguage != null)
+            result = commonLanguage.GetTranslation(key);
+
+        // If we don't get a translation at all then do an assert
+        Debug.Assert(result != null,
+            string.Format("'{0}' has no translation for '{1}'",
+                          currentLanguage.Name, key));
+
+        return result;
     }
 }

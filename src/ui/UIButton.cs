@@ -14,20 +14,12 @@ class UIButton
     // A RectangleShape used for the rendering of the primitive of the button
     private RectangleShape shape;
     // A Text Object used to render text in SFML
-    private Text text;
+    private UIText text;
 
     public string Text
     {
-        get
-        {
-            return text.DisplayedString;
-        }
-
-        set
-        {
-            text.DisplayedString = value;
-            UpdateText();
-        }
+        get { return text.Text; }
+        set { text.Text = value; }
     }
 
     // Action used for if the button is clicked on then the button can 
@@ -39,11 +31,12 @@ class UIButton
     /// </summary>
     /// <param name="position">The position of the button</param>
     /// <param name="size">The size of the button</param>
-    /// <param name="text">The text inside the button</param>
+    /// <param name="textTranslationKey">The translation key for the text, 
+    /// used to look up the translation the text should have</param>
     /// <param name="textSize">The text size</param>
     /// <param name="font">The font used for the text</param>
-    public UIButton(Vector2f position, Vector2f size, String text,
-                    uint textSize, Font font)
+    public UIButton(Vector2f position, Vector2f size,
+                    String textTranslationKey, uint textSize, Font font)
     {
         shape = new RectangleShape(size);
         shape.Origin = size / 2.0f;
@@ -53,17 +46,7 @@ class UIButton
         shape.OutlineColor = Color.White;
         shape.OutlineThickness = 4.0f;
 
-        this.text = new Text(text, font);
-        this.text.CharacterSize = textSize;
-
-        UpdateText();
-        this.text.Position = position;
-    }
-
-    private void UpdateText()
-    {
-        FloatRect rect = this.text.GetLocalBounds();
-        this.text.Origin = new Vector2f(rect.Width / 2.0f, rect.Height / 2.0f);
+        this.text = new UIText(position, textTranslationKey, textSize, font);
     }
 
     /// <summary>
@@ -126,6 +109,6 @@ class UIButton
         renderTarget.Draw(shape);
 
         // Render the text inside the button
-        renderTarget.Draw(text);
+        text.Render(renderTarget);
     }
 }

@@ -9,7 +9,7 @@ public class CustomizeScreen : Screen
     private Font font;
 
     // The title in this screen
-    private Text title;
+    private UIText title;
 
     // The back button, used for getting back to the main menu
     private UIButton backButton;
@@ -33,9 +33,6 @@ public class CustomizeScreen : Screen
 
         // Create the skin selectors
         CreateSkinSelectors();
-
-        LanguageManager.Instance.RegisterOnLanguageChangedCallback(
-            OnLanguageChanged);
     }
 
     private void CreateTitle()
@@ -44,17 +41,8 @@ public class CustomizeScreen : Screen
         Vector2u windowSize = Application.Instance.Window.Size;
 
         // Create the text and set the character size
-        title = new Text(
-            LanguageManager.Instance.GetTranslation("customize.title"), font);
-        title.CharacterSize = 50;
-
-        // Get the bounds for the text
-        FloatRect rect = title.GetLocalBounds();
-        // Set the origin to the center of the text
-        title.Origin = new Vector2f(rect.Width / 2, rect.Height / 2);
-
-        // Set the position of the title
-        title.Position = new Vector2f(windowSize.X / 2.0f, 160.0f);
+        title = new UIText(new Vector2f(windowSize.X / 2.0f, 160.0f),
+                           "customize.title", 50, font);
     }
 
     private void CreateBackButton()
@@ -62,16 +50,14 @@ public class CustomizeScreen : Screen
         // Get the window size
         Vector2u windowSize = Application.Instance.Window.Size;
 
-        string text =
-            LanguageManager.Instance.GetTranslation("customize.backbutton");
-
         // Create the back button
         backButton = new UIButton(new Vector2f(windowSize.X / 2.0f,
                                                windowSize.Y - 120.0f),
                                   new Vector2f(240.0f, 60.0f),
-                                  text, 20, font);
+                                  "customize.backbutton", 20, font);
 
-        // Register the back button click callback
+        // Register a OnClick callback on the back button so the user 
+        // can get back to the main menu
         backButton.RegisterOnClickAciton(OnBackButtonClicked);
     }
 
@@ -93,21 +79,6 @@ public class CustomizeScreen : Screen
                                         windowSize.X / 2.0f + 350.0f,
                                         windowSize.Y / 2.0f),
                                     font);
-    }
-
-    private void OnLanguageChanged()
-    {
-        // Set the title to the new translation
-        title.DisplayedString =
-            LanguageManager.Instance.GetTranslation("customize.title");
-
-        // Get the bounds of the text
-        FloatRect rect = title.GetLocalBounds();
-        // Set the origin to the center of the text
-        title.Origin = new Vector2f(rect.Width / 2, rect.Height / 2);
-
-        backButton.Text =
-            LanguageManager.Instance.GetTranslation("customize.backbutton");
     }
 
     private void OnBackButtonClicked()
@@ -154,7 +125,7 @@ public class CustomizeScreen : Screen
     public override void Render(RenderTarget renderTarget)
     {
         // Render the title
-        renderTarget.Draw(title);
+        title.Render(renderTarget);
 
         // Render the back button
         backButton.Render(renderTarget);
