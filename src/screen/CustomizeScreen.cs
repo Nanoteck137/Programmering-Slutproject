@@ -14,13 +14,11 @@ public class CustomizeScreen : Screen
     // The back button, used for getting back to the main menu
     private UIButton backButton;
 
-    // A preview of the left paddle, used to see the skin selected by the user
-    private RectangleShape leftPaddlePreview;
-    private UIButton skinChangeLeft;
-    private UIButton skinChangeRight;
+    // The left skin selector
+    private UISkinSelector leftPaddleSelector;
 
-    // The left paddle skin id used to look up the skin when rendering a paddle
-    private int leftPaddleSkinID = 0;
+    // The right skin selector
+    private UISkinSelector rightPaddleSelector;
 
     public CustomizeScreen()
     {
@@ -30,47 +28,11 @@ public class CustomizeScreen : Screen
         // Create the title
         CreateTitle();
 
-        // Get the window size
-        Vector2u windowSize = Application.Instance.Window.Size;
-
         // Create the back button
-        backButton = new UIButton(new Vector2f(windowSize.X / 2.0f,
-                                               windowSize.Y - 120.0f),
-                                  new Vector2f(240.0f, 60.0f),
-                                  "Back", 20, font);
+        CreateBackButton();
 
-        // Register the back button click callback
-        backButton.RegisterOnClickAciton(OnBackButtonClicked);
-
-        // Create some constants for the paddle size
-        const float PADDLE_WIDTH = 16.0f;
-        const float PADDLE_HEIGHT = 200.0f;
-
-        // Create the left paddle preview
-        leftPaddlePreview = new RectangleShape(new Vector2f(PADDLE_WIDTH,
-                                                            PADDLE_HEIGHT));
-
-        // Set the left paddle preview origin to the center of the rectangle
-        leftPaddlePreview.Origin = new Vector2f(PADDLE_WIDTH / 2.0f,
-                                                PADDLE_HEIGHT / 2.0f);
-
-        // Set the position of the left preview paddle
-        leftPaddlePreview.Position = new Vector2f(windowSize.X / 2.0f - 350.0f,
-                                                  windowSize.Y / 2.0f);
-
-        skinChangeLeft = new UIButton(new Vector2f(
-                                            windowSize.X / 2.0f - 450.0f,
-                                            windowSize.Y / 2.0f),
-                                      new Vector2f(60.0f, 60.0f),
-                                      "<", 20, font);
-        skinChangeLeft.RegisterOnClickAciton(OnSkinChangeLeft);
-
-        skinChangeRight = new UIButton(new Vector2f(
-                                            windowSize.X / 2.0f - 250.0f,
-                                            windowSize.Y / 2.0f),
-                                      new Vector2f(60.0f, 60.0f),
-                                      ">", 20, font);
-        skinChangeRight.RegisterOnClickAciton(OnSkinChangeRight);
+        // Create the skin selectors
+        CreateSkinSelectors();
     }
 
     private void CreateTitle()
@@ -91,6 +53,41 @@ public class CustomizeScreen : Screen
         title.Position = new Vector2f(windowSize.X / 2.0f, 160.0f);
     }
 
+    private void CreateBackButton()
+    {
+        // Get the window size
+        Vector2u windowSize = Application.Instance.Window.Size;
+
+        // Create the back button
+        backButton = new UIButton(new Vector2f(windowSize.X / 2.0f,
+                                               windowSize.Y - 120.0f),
+                                  new Vector2f(240.0f, 60.0f),
+                                  "Back", 20, font);
+
+        // Register the back button click callback
+        backButton.RegisterOnClickAciton(OnBackButtonClicked);
+    }
+
+    private void CreateSkinSelectors()
+    {
+        // Get the window size
+        Vector2u windowSize = Application.Instance.Window.Size;
+
+        // Create the left skin selector 
+        leftPaddleSelector = new UISkinSelector(
+                                    new Vector2f(
+                                        windowSize.X / 2.0f - 350.0f,
+                                        windowSize.Y / 2.0f),
+                                    font);
+
+        // Create the left skin selector 
+        rightPaddleSelector = new UISkinSelector(
+                                    new Vector2f(
+                                        windowSize.X / 2.0f + 350.0f,
+                                        windowSize.Y / 2.0f),
+                                    font);
+    }
+
     private void OnBackButtonClicked()
     {
         // Change the screen back to the main menu
@@ -98,32 +95,26 @@ public class CustomizeScreen : Screen
             Application.Instance.MainMenuScreen);
     }
 
-    private void OnSkinChangeLeft()
-    {
-        /// Decrement the skin id and check if the skin id is out of bounds 
-        leftPaddleSkinID--;
-        if (leftPaddleSkinID < 0)
-            leftPaddleSkinID = 0;
-    }
-
-    private void OnSkinChangeRight()
-    {
-        /// Increment the skin id and check if the skin id is out of bounds 
-        leftPaddleSkinID++;
-        if (leftPaddleSkinID >= SkinManager.Instance.NumSkins)
-            leftPaddleSkinID = SkinManager.Instance.NumSkins - 1;
-    }
-
     public override void OnScreenShow()
     {
-        // Reset the skin id to be sure
-        leftPaddleSkinID = GameManager.Instance.LeftPaddleSkinID;
+        // Reset the left skin id just to be sure
+        leftPaddleSelector.PaddleSkinID
+            = GameManager.Instance.LeftPaddleSkinID;
+
+        // Reset the right skin id just to be sure
+        rightPaddleSelector.PaddleSkinID =
+            GameManager.Instance.RightPaddleSkinID;
     }
 
     public override void OnScreenHide()
     {
-        // Save the skin the user selected in the game manager
-        GameManager.Instance.LeftPaddleSkinID = leftPaddleSkinID;
+        // Save the left skin the user selected in the game manager
+        GameManager.Instance.LeftPaddleSkinID
+            = leftPaddleSelector.PaddleSkinID;
+
+        // Save the right skin the user selected in the game manager
+        GameManager.Instance.RightPaddleSkinID
+            = rightPaddleSelector.PaddleSkinID;
     }
 
     public override void Update(float deltaTime)
@@ -131,10 +122,11 @@ public class CustomizeScreen : Screen
         // Update the back button
         backButton.Update(deltaTime);
 
-        // Update the skin change left button
-        skinChangeLeft.Update(deltaTime);
-        // Update the skin change right button
-        skinChangeRight.Update(deltaTime);
+        // Update the left skin selector
+        leftPaddleSelector.Update(deltaTime);
+
+        // Update the right skin selector
+        rightPaddleSelector.Update(deltaTime);
     }
 
     public override void Render(RenderTarget renderTarget)
@@ -145,16 +137,10 @@ public class CustomizeScreen : Screen
         // Render the back button
         backButton.Render(renderTarget);
 
-        Skin skin = SkinManager.Instance.GetSkinFromID(leftPaddleSkinID);
-        leftPaddlePreview.FillColor = skin.Color;
+        // Render the left paddle selector
+        leftPaddleSelector.Render(renderTarget);
 
-        // Render the paddle preview
-        renderTarget.Draw(leftPaddlePreview);
-
-        // Render the skinChangeLeft button
-        skinChangeLeft.Render(renderTarget);
-
-        // Render the skinChangeRight button
-        skinChangeRight.Render(renderTarget);
+        // Render the left paddle selector
+        rightPaddleSelector.Render(renderTarget);
     }
 }

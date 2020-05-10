@@ -30,16 +30,23 @@ public class GameView
 
     public void Render(RenderTarget renderTarget)
     {
+        // Set the position and skin of the left paddle then render it
         leftPaddle.Position = Model.LeftPaddle.Position;
 
-        Skin skin = SkinManager.Instance.GetSkinFromID(Model.LeftPaddle.SkinID);
-        leftPaddle.FillColor = skin.Color;
+        Skin leftSkin = SkinManager.Instance.GetSkinFromID(Model.LeftPaddle.SkinID);
+        leftPaddle.FillColor = leftSkin.Color;
 
         renderTarget.Draw(leftPaddle);
 
+        // Set the position and skin of the right paddle then render it
         rightPaddle.Position = Model.RightPaddle.Position;
+
+        Skin rightSkin = SkinManager.Instance.GetSkinFromID(Model.RightPaddle.SkinID);
+        rightPaddle.FillColor = rightSkin.Color;
+
         renderTarget.Draw(rightPaddle);
 
+        // Set the position of the ball and render it
         ball.Position = Model.Ball.Position;
         renderTarget.Draw(ball);
     }
