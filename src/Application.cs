@@ -33,6 +33,8 @@ public class Application
     private GameScreen gameScreen;
     public GameScreen GameScreen { get { return gameScreen; } }
 
+    private Text testText;
+
     // Store the state if the application is running, and chaging this 
     // to false when the application is running should exit the app
     private bool running = false;
@@ -50,9 +52,12 @@ public class Application
         // only be one instance
         instance = this;
 
+        Styles windowStyle = Styles.Titlebar | Styles.Close;
+
         // Create a RenderWindow and setup the event callbacks
         Window = new RenderWindow(new VideoMode(1280, 720),
-                                  "Best Pong", Styles.Default);
+                                  "Best Pong", windowStyle);
+
         // Register some callbacks
         Window.Closed += this.Window_Closed;
         Window.KeyPressed += this.Window_KeyPressed;
@@ -71,6 +76,36 @@ public class Application
         SkinManager.Instance.AddSkin(new Skin(Color.White));
         SkinManager.Instance.AddSkin(new Skin(Color.Red));
         SkinManager.Instance.AddSkin(new Skin(Color.Blue));
+
+
+
+        Language enUS = new Language("en-US");
+        enUS.AddTranslation("mainmenu.title", "The Best Pong");
+        enUS.AddTranslation("mainmenu.playbutton", "Play Game");
+        enUS.AddTranslation("mainmenu.customizationbutton", "Customization");
+        enUS.AddTranslation("mainmenu.settingsbutton", "Settings");
+        enUS.AddTranslation("mainmenu.quitbutton", "Quit Game");
+
+        Language seSE = new Language("se-SE");
+        seSE.AddTranslation("mainmenu.title", "Svenska är bra");
+        seSE.AddTranslation("mainmenu.playbutton", "Play Game");
+        seSE.AddTranslation("mainmenu.customizationbutton", "Customization");
+        seSE.AddTranslation("mainmenu.settingsbutton", "Settings");
+        seSE.AddTranslation("mainmenu.quitbutton", "Quit Game");
+
+        LanguageManager.Instance.AddLanguage(enUS);
+        LanguageManager.Instance.AddLanguage(seSE);
+        LanguageManager.Instance.SetCurrentLanguage("en-US");
+
+        Font font = new Font("res/fonts/font.ttf");
+        testText = new Text(LanguageManager.Instance.GetTranslation("mainmenu.title"), font);
+
+        LanguageManager.Instance.RegisterOnLanguageChangedCallback(OnLanguageChanged);
+    }
+
+    private void OnLanguageChanged()
+    {
+        testText.DisplayedString = LanguageManager.Instance.GetTranslation("mainmenu.title");
     }
 
     /// <summary>
@@ -112,6 +147,19 @@ public class Application
 
             // Update the GameManager
             GameManager.Instance.Update(deltaTime);
+
+            if (Input.Instance.IsKeyPressed(Keyboard.Key.Num1))
+            {
+                Console.WriteLine("Changing the language to 'en-US'");
+                LanguageManager.Instance.SetCurrentLanguage("en-US");
+            }
+            else if (Input.Instance.IsKeyPressed(Keyboard.Key.Num2))
+            {
+                Console.WriteLine("Changing the language to 'se-SE'");
+                LanguageManager.Instance.SetCurrentLanguage("se-SE");
+            }
+
+            Window.Draw(testText);
 
             // Display the contents to the window
             Window.Display();

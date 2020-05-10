@@ -46,6 +46,7 @@ public class MainMenuScreen : Screen
         // Create some buttons for the menu
         CreateMenuButton("Play Game", 20, OnPlayButtonClicked);
         CreateMenuButton("Customize", 20, OnCustomizeButtonClicked);
+        CreateMenuButton("Settings", 20, OnSettingsButtonClicked);
         CreateMenuButton("Quit Game", 20, OnQuitButtonClicked);
 
         // Create the title
@@ -101,6 +102,11 @@ public class MainMenuScreen : Screen
         // Change the screen to the customize screen
         ScreenManager.Instance.ChangeScreen(
             Application.Instance.CustomizeScreen);
+    }
+
+    private void OnSettingsButtonClicked()
+    {
+        Console.WriteLine("Open the settings menu!!");
     }
 
     private void OnQuitButtonClicked()

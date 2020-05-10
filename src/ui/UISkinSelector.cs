@@ -10,8 +10,8 @@ public class UISkinSelector
     const float PADDLE_HEIGHT = 200.0f;
 
     // Create some constants for the skin changing buttons
-    const float CHANGE_BUTTON_WIDTH = 60.0f;
-    const float CHANGE_BUTTON_HEIGHT = 60.0f;
+    const float CHANGE_BUTTON_WIDTH = 45.0f;
+    const float CHANGE_BUTTON_HEIGHT = 45.0f;
 
     // The shape for the preview
     private RectangleShape paddlePreview;
@@ -51,7 +51,7 @@ public class UISkinSelector
                                       new Vector2f(
                                             CHANGE_BUTTON_WIDTH,
                                             CHANGE_BUTTON_HEIGHT),
-                                      "<", 20, font);
+                                      "<", 25, font);
 
         // Register the callback when the button is clicked on
         skinChangeLeft.RegisterOnClickAciton(OnSkinChangeLeft);
@@ -63,12 +63,15 @@ public class UISkinSelector
                                        new Vector2f(
                                             CHANGE_BUTTON_WIDTH,
                                             CHANGE_BUTTON_HEIGHT),
-                                       ">", 20, font);
+                                       ">", 25, font);
 
         // Register the callback when the button is clicked on
         skinChangeRight.RegisterOnClickAciton(OnSkinChangeRight);
     }
 
+    /// <summary>
+    /// Called when the user clicks the left change button
+    /// </summary>
     private void OnSkinChangeLeft()
     {
         /// Decrement the skin id and check if the skin id is out of bounds 
@@ -77,6 +80,9 @@ public class UISkinSelector
             paddleSkinID = 0;
     }
 
+    /// <summary>
+    /// Called when the user clicks the right change button
+    /// </summary>
     private void OnSkinChangeRight()
     {
         /// Increment the skin id and check if the skin id is out of bounds 
@@ -86,6 +92,10 @@ public class UISkinSelector
 
     }
 
+    /// <summary>
+    /// Update the selector
+    /// </summary>
+    /// <param name="deltaTime"></param>
     public void Update(float deltaTime)
     {
         // Update the skin change left button
@@ -94,6 +104,11 @@ public class UISkinSelector
         skinChangeRight.Update(deltaTime);
     }
 
+    /// <summary>
+    /// Render the selector
+    /// </summary>
+    /// <param name="renderTarget">The RenderTarget the selector should 
+    /// render to</param>
     public void Render(RenderTarget renderTarget)
     {
         // Get the skin and apply it to the preview
@@ -108,6 +123,5 @@ public class UISkinSelector
 
         // Render the skinChangeRight button
         skinChangeRight.Render(renderTarget);
-
     }
 }
