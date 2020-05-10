@@ -23,7 +23,10 @@ public class GameManager
         Model = new GameModel();
     }
 
-    public void NewGame() { }
+    public void NewGame()
+    {
+        Model = new GameModel();
+    }
 
     public void Update(float deltaTime)
     {

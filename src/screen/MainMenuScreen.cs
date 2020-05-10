@@ -68,9 +68,6 @@ public class MainMenuScreen : Screen
 
     private void OnPlayButtonClicked()
     {
-        // TODO(patrik): Change the screen to the gameplay
-        Console.WriteLine("Play Button clicked");
-
         ScreenManager.Instance.ChangeScreen(Application.Instance.GameScreen);
     }
 

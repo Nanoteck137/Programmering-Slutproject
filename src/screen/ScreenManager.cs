@@ -35,7 +35,17 @@ public class ScreenManager
     /// <param name="screen"></param>
     public void ChangeScreen(Screen screen)
     {
+        if (CurrentScreen != null)
+        {
+            // Send a screen hide event to the previous screen
+            CurrentScreen.OnScreenHide();
+        }
+
+        // Set the new screen
         CurrentScreen = screen;
+
+        // Send a screen show event to the new screen
+        CurrentScreen.OnScreenShow();
     }
 
     /// <summary>
@@ -44,6 +54,7 @@ public class ScreenManager
     /// <param name="deltaTime"></param>
     public void Update(float deltaTime)
     {
+        // If there is a screen then update it
         if (CurrentScreen == null)
             return;
 
@@ -57,6 +68,7 @@ public class ScreenManager
     /// render to</param>
     public void Render(RenderTarget renderTarget)
     {
+        // If there is a screen then render it
         if (CurrentScreen == null)
             return;
 

@@ -13,13 +13,13 @@ public class GameScreen : Screen
     public GameScreen()
     {
         GameManager.Instance.NewGame();
-
         View = new GameView(GameManager.Instance.Model);
     }
 
     public override void OnScreenShow()
     {
         GameManager.Instance.NewGame();
+        View = new GameView(GameManager.Instance.Model);
     }
 
     public override void OnScreenHide() { }
