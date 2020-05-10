@@ -83,7 +83,9 @@ public class MainMenuScreen : Screen
     private void CreateMenuButton(string textKey, uint textSize,
                                   Action clickAction)
     {
+        // Get the current translation for the button
         string text = LanguageManager.Instance.GetTranslation(textKey);
+
         // Create the button
         UIButton button = new UIButton(nextButtonPosition,
                                        new Vector2f(BUTTON_WIDTH,

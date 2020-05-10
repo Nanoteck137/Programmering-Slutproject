@@ -40,6 +40,9 @@ public class SettingsScreen : Screen
         CreateBackButton();
     }
 
+    /// <summary>
+    /// Creates the titles used in the menu
+    /// </summary>
     private void CreateTitles()
     {
         // Get the window size
@@ -55,6 +58,9 @@ public class SettingsScreen : Screen
                                     "settings.changelanguagetitle", 30, font);
     }
 
+    /// <summary>
+    /// Creates the buttons to change the language
+    /// </summary>
     private void CreateLanguageButtons()
     {
         // Get the window size
@@ -97,6 +103,9 @@ public class SettingsScreen : Screen
         }
     }
 
+    /// <summary>
+    /// Creates the back button
+    /// </summary>
     private void CreateBackButton()
     {
         // Get the window size
@@ -121,12 +130,19 @@ public class SettingsScreen : Screen
             OnLanguageChanged);
     }
 
+    /// <summary>
+    /// When the language changes update the translations
+    /// </summary>
     private void OnLanguageChanged()
     {
         backButton.Text =
             LanguageManager.Instance.GetTranslation("settings.backbutton");
     }
 
+    /// <summary>
+    /// When the user clicks the back button then change the current 
+    /// screen to the main menu
+    /// </summary>
     private void OnBackButtonClicked()
     {
         // Change the screen back to the main menu
@@ -135,22 +151,36 @@ public class SettingsScreen : Screen
     }
 
 
+    /// <summary>
+    /// Update the screen
+    /// </summary>
+    /// <param name="deltaTime">Deltatime</param>
     public override void Update(float deltaTime)
     {
+        // Update the language buttons
         foreach (UIButton button in languageButtons)
             button.Update(deltaTime);
 
+        // Update the back button
         backButton.Update(deltaTime);
     }
 
+    /// <summary>
+    /// Render the screen
+    /// </summary>
+    /// <param name="renderTarget">The RenderTarget the screen should be 
+    /// rendered to</param>
     public override void Render(RenderTarget renderTarget)
     {
+        // Render the titles
         title.Render(renderTarget);
         changeLanguageTitle.Render(renderTarget);
 
+        // Render the language buttons
         foreach (UIButton button in languageButtons)
             button.Render(renderTarget);
 
+        // Render the back button
         backButton.Render(renderTarget);
     }
 }
