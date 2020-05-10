@@ -33,6 +33,11 @@ public class Application
     private GameScreen gameScreen;
     public GameScreen GameScreen { get { return gameScreen; } }
 
+    // Store the SettingsScreen so we don't need to create a new one 
+    // always when changing screens
+    private SettingsScreen settingsScreen;
+    public SettingsScreen SettingsScreen { get { return settingsScreen; } }
+
     // Store the state if the application is running, and chaging this 
     // to false when the application is running should exit the app
     private bool running = false;
@@ -63,6 +68,10 @@ public class Application
         enUS.AddTranslation("customize.title", "Customize");
         enUS.AddTranslation("customize.backbutton", "Back");
 
+        enUS.AddTranslation("settings.title", "Settings");
+        enUS.AddTranslation("settings.changelanguagetitle", "Change Language");
+        enUS.AddTranslation("settings.backbutton", "Back");
+
         // TODO(patrik): Move this to a better place
         Language seSE = new Language("se-SE");
         seSE.AddTranslation("window.title", "Bästa Pong");
@@ -75,6 +84,10 @@ public class Application
 
         seSE.AddTranslation("customize.title", "Anpassa");
         seSE.AddTranslation("customize.backbutton", "Tillbacka");
+
+        seSE.AddTranslation("settings.title", "Inställningar");
+        seSE.AddTranslation("settings.changelanguagetitle", "Ändra Språk");
+        seSE.AddTranslation("settings.backbutton", "Tillbacka");
 
         // TODO(patrik): Move this to a better place
         LanguageManager.Instance.AddLanguage(enUS);
@@ -98,6 +111,7 @@ public class Application
         mainMenuScreen = new MainMenuScreen();
         customizeScreen = new CustomizeScreen();
         gameScreen = new GameScreen();
+        settingsScreen = new SettingsScreen();
 
         // Change the screen to the MainMenu
         ScreenManager.Instance.ChangeScreen(mainMenuScreen);

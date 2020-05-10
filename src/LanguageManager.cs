@@ -78,6 +78,11 @@ public class LanguageManager
     // A dictionary holding languages by name
     private Dictionary<string, Language> languages;
 
+    public Dictionary<string, Language> Languages
+    {
+        get { return languages; }
+    }
+
     // A action to notify users of language changes
     private Action onLanguageChangedAction;
 

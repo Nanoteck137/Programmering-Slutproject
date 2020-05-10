@@ -136,7 +136,9 @@ public class MainMenuScreen : Screen
 
     private void OnSettingsButtonClicked()
     {
-        Console.WriteLine("Open the settings menu!!");
+        // Change the screen to the settings screen
+        ScreenManager.Instance.ChangeScreen(
+            Application.Instance.SettingsScreen);
     }
 
     private void OnQuitButtonClicked()
