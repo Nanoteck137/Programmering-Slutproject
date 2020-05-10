@@ -9,13 +9,25 @@ using SFML.Window;
 public class GameModel
 {
     // The left paddle
-    public Paddle LeftPaddle { get; private set; }
+    private Paddle leftPaddle;
 
     // The right paddle
-    public Paddle RightPaddle { get; private set; }
+    private Paddle rightPaddle;
+
+    // The score of the left side
+    private int leftSideScore;
+
+    // The score of the right side
+    private int rightSideScore;
 
     // The ball
-    public Ball Ball { get; private set; }
+    private Ball ball;
+
+    public Paddle LeftPaddle { get { return leftPaddle; } }
+    public Paddle RightPaddle { get { return rightPaddle; } }
+    public int LeftSideScore { get { return leftSideScore; } }
+    public int RightSideScore { get { return rightSideScore; } }
+    public Ball Ball { get { return ball; } }
 
     /// <summary>
     /// Used for initializing the game data
@@ -27,7 +39,9 @@ public class GameModel
 
         // Create the ball
         float ballRadius = 20.0f;
-        Ball = new Ball(new Vector2f(windowSize.X / 2, windowSize.Y / 2), ballRadius);
+        ball = new Ball(new Vector2f(windowSize.X / 2, windowSize.Y / 2), ballRadius);
+        ball.OnLeftSideHit += this.OnBallHitLeftSide;
+        ball.OnRightSideHit += this.OnBallHitRightSide;
 
         // Setup some common paddle variables
         float offset = 25.0f;
@@ -44,7 +58,7 @@ public class GameModel
         };
 
         // Create the left paddle with the config
-        LeftPaddle = new PlayerPaddle(leftConfig);
+        leftPaddle = new PlayerPaddle(leftConfig);
 
         // Setup the right paddle config
         PlayerPaddle.Config rightConfig = new PlayerPaddle.Config()
@@ -56,7 +70,34 @@ public class GameModel
         };
 
         // Create the paddle
-        RightPaddle = new PlayerPaddle(rightConfig);
+        rightPaddle = new PlayerPaddle(rightConfig);
+    }
+
+    private void OnBallHitLeftSide()
+    {
+        // Increment the score for the right side
+        rightSideScore++;
+
+        // Reset the round
+        ResetBall();
+    }
+
+    private void OnBallHitRightSide()
+    {
+        // Increment the score for the left side
+        leftSideScore++;
+
+        // Reset the round
+        ResetBall();
+    }
+
+    private void ResetBall()
+    {
+        // Get the window size
+        Vector2u windowSize = Application.Instance.Window.Size;
+
+        // Reset the position of the ball
+        ball.Position = new Vector2f(windowSize.X / 2, windowSize.Y / 2);
     }
 
     /// <summary>
@@ -65,16 +106,16 @@ public class GameModel
     private void CheckBallCollisionLeftPaddle()
     {
         // Check if the ball is colliding with the left paddle
-        if (Ball.Position.X - Ball.Radius < LeftPaddle.Position.X + LeftPaddle.Size.X / 2 &&
-            Ball.Position.X - Ball.Radius > LeftPaddle.Position.X &&
-            Ball.Position.Y + Ball.Radius >= LeftPaddle.Position.Y - LeftPaddle.Size.Y / 2 &&
-            Ball.Position.Y - Ball.Radius <= LeftPaddle.Position.Y + LeftPaddle.Size.Y / 2)
+        if (ball.Position.X - ball.Radius < leftPaddle.Position.X + leftPaddle.Size.X / 2 &&
+            ball.Position.X - ball.Radius > leftPaddle.Position.X &&
+            ball.Position.Y + ball.Radius >= leftPaddle.Position.Y - leftPaddle.Size.Y / 2 &&
+            ball.Position.Y - ball.Radius <= leftPaddle.Position.Y + leftPaddle.Size.Y / 2)
         {
             // If the ball is colliding with the left paddle then change 
             // the direction of the ball
-            Vector2f dir = Ball.Direction;
+            Vector2f dir = ball.Direction;
             dir.X *= -1;
-            Ball.Direction = dir;
+            ball.Direction = dir;
         }
     }
 
@@ -84,16 +125,16 @@ public class GameModel
     private void CheckBallCollisionRightPaddle()
     {
         // Check if the ball is colliding with the right paddle
-        if (Ball.Position.X + Ball.Radius < RightPaddle.Position.X + RightPaddle.Size.X / 2 &&
-            Ball.Position.X + Ball.Radius > RightPaddle.Position.X &&
-            Ball.Position.Y + Ball.Radius >= RightPaddle.Position.Y - RightPaddle.Size.Y / 2 &&
-            Ball.Position.Y - Ball.Radius <= RightPaddle.Position.Y + RightPaddle.Size.Y / 2)
+        if (ball.Position.X + ball.Radius < rightPaddle.Position.X + rightPaddle.Size.X / 2 &&
+            ball.Position.X + ball.Radius > rightPaddle.Position.X &&
+            ball.Position.Y + ball.Radius >= rightPaddle.Position.Y - rightPaddle.Size.Y / 2 &&
+            ball.Position.Y - ball.Radius <= rightPaddle.Position.Y + rightPaddle.Size.Y / 2)
         {
             // If the ball is colliding with the right paddle then change 
             // the direction of the ball
-            Vector2f dir = Ball.Direction;
+            Vector2f dir = ball.Direction;
             dir.X *= -1;
-            Ball.Direction = dir;
+            ball.Direction = dir;
         }
     }
 
@@ -104,14 +145,14 @@ public class GameModel
     public void Update(float deltaTime)
     {
         // Update the paddles
-        LeftPaddle.Update(deltaTime);
-        RightPaddle.Update(deltaTime);
+        leftPaddle.Update(deltaTime);
+        rightPaddle.Update(deltaTime);
 
         // Check if the ball is colliding with any of the paddles
         CheckBallCollisionLeftPaddle();
         CheckBallCollisionRightPaddle();
 
         // Update the ball
-        Ball.Update(deltaTime);
+        ball.Update(deltaTime);
     }
 }
