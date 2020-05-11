@@ -64,7 +64,7 @@ public class Ball
 
         // Check if the ball is going out of the bounds of the window, 
         // and if it is then change the direction the ball is traveling at
-        if (position.X < 0.0f)
+        if (position.X - radius < 0.0f)
         {
             // dir.X *= -1;
             if (OnLeftSideHit != null)

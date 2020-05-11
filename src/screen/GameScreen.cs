@@ -33,6 +33,8 @@ public class GameScreen : Screen
         {
             ScreenManager.Instance.ChangeScreen(Application.Instance.MainMenuScreen);
         }
+
+        View.Update(deltaTime);
     }
 
     public override void Render(RenderTarget renderTarget)

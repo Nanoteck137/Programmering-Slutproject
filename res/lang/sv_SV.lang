@@ -12,3 +12,5 @@ customize.backbutton = Tillbacka
 settings.title = Inställningar
 settings.changelanguagetitle = Ändra Språk
 settings.backbutton = Tillbacka
+
+game.exitmessage = Tryck på ESC för menyn

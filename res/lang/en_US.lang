@@ -12,3 +12,5 @@ customize.backbutton = Back
 settings.title = Settings
 settings.changelanguagetitle = Change Language
 settings.backbutton = Back
+
+game.exitmessage = Press ESC to main menu

@@ -22,6 +22,12 @@ public class UIText
         set { text.DisplayedString = value; UpdateOrigin(); }
     }
 
+    public Color Color
+    {
+        get { return text.FillColor; }
+        set { text.FillColor = value; }
+    }
+
     public UIText(Vector2f position, string translationKey, uint size, Font font)
     {
         // Create the SFML Text object
