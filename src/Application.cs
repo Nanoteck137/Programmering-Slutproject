@@ -58,59 +58,7 @@ public class Application
         // only be one instance
         instance = this;
 
-        LanguageParser parser = new LanguageParser();
-        Dictionary<string, string> translations = parser.ParseFile("res/lang/en_US.lang");
-        foreach (var translation in translations)
-        {
-            Console.WriteLine("Translation: {0} = {1}", translation.Key, translation.Value);
-        }
-
-        // TODO(patrik): Move this to a better place
-        Language common = new Language("common");
-        common.AddTranslation("skinselector.left", "<");
-        common.AddTranslation("skinselector.right", ">");
-
-        common.AddTranslation("en-US", "English (US)");
-        common.AddTranslation("se-SE", "Svenska");
-
-        // TODO(patrik): Move this to a better place
-        Language enUS = new Language("en-US");
-        enUS.AddTranslation("window.title", "The Best Pong");
-
-        enUS.AddTranslation("mainmenu.title", "The Best Pong");
-        enUS.AddTranslation("mainmenu.playbutton", "Play Game");
-        enUS.AddTranslation("mainmenu.customizationbutton", "Customize");
-        enUS.AddTranslation("mainmenu.settingsbutton", "Settings");
-        enUS.AddTranslation("mainmenu.quitbutton", "Quit Game");
-
-        enUS.AddTranslation("customize.title", "Customize");
-        enUS.AddTranslation("customize.backbutton", "Back");
-
-        enUS.AddTranslation("settings.title", "Settings");
-        enUS.AddTranslation("settings.changelanguagetitle", "Change Language");
-        enUS.AddTranslation("settings.backbutton", "Back");
-
-        // TODO(patrik): Move this to a better place
-        Language seSE = new Language("se-SE");
-        seSE.AddTranslation("window.title", "Bästa Pong");
-
-        seSE.AddTranslation("mainmenu.title", "Bästa Pong");
-        seSE.AddTranslation("mainmenu.playbutton", "Spela spelet");
-        seSE.AddTranslation("mainmenu.customizationbutton", "Anpassa");
-        seSE.AddTranslation("mainmenu.settingsbutton", "Inställningar");
-        seSE.AddTranslation("mainmenu.quitbutton", "Avsluta");
-
-        seSE.AddTranslation("customize.title", "Anpassa");
-        seSE.AddTranslation("customize.backbutton", "Tillbacka");
-
-        seSE.AddTranslation("settings.title", "Inställningar");
-        seSE.AddTranslation("settings.changelanguagetitle", "Ändra Språk");
-        seSE.AddTranslation("settings.backbutton", "Tillbacka");
-
-        // TODO(patrik): Move this to a better place
-        // LanguageManager.Instance.CommonLanguage = common;
-        // LanguageManager.Instance.AddLanguage(enUS);
-        // LanguageManager.Instance.AddLanguage(seSE);
+        // Set the language to en_US as default
         LanguageManager.Instance.SetCurrentLanguage("en_US");
 
         Styles windowStyle = Styles.Titlebar | Styles.Close;
