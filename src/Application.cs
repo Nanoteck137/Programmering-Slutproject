@@ -85,11 +85,6 @@ public class Application
         // Change the screen to the MainMenu
         ScreenManager.Instance.ChangeScreen(mainMenuScreen);
 
-        // TODO(patrik): Move this!?!?
-        SkinManager.Instance.AddSkin(new Skin(Color.White));
-        SkinManager.Instance.AddSkin(new Skin(Color.Red));
-        SkinManager.Instance.AddSkin(new Skin(Color.Blue));
-
         // Register a language changed callback
         LanguageManager.Instance.RegisterOnLanguageChangedCallback(OnLanguageChanged);
     }

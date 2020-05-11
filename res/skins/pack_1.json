@@ -1,0 +1,22 @@
+{
+    "name": "Solid Color pack",
+
+    "skins": [
+        { 
+            "name": "White",
+            "color": "#ffffffff"
+        },
+        { 
+            "name": "Red",
+            "color": "#ff000066"
+        },
+        { 
+            "name": "Green",
+            "color": "#00ff00ff"
+        },
+        { 
+            "name": "Blue",
+            "color": "#0000ffff"
+        }
+    ]
+}
