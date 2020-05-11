@@ -16,10 +16,10 @@ public class UIText
     // change we still can look up the new translation with this key
     private string translationKey;
 
-    public string Text
+    public string TranslationKey
     {
-        get { return text.DisplayedString; }
-        set { text.DisplayedString = value; UpdateOrigin(); }
+        get { return translationKey; }
+        set { translationKey = value; UpdateTextObject(); }
     }
 
     public Color Color
@@ -30,9 +30,12 @@ public class UIText
 
     public UIText(Vector2f position, string translationKey, uint size, Font font)
     {
+        // Set the translation key
+        this.translationKey = translationKey;
+
         // Create the SFML Text object
         text = new Text(
-            LanguageManager.Instance.GetTranslation(translationKey), font);
+            "", font);
 
         // Set the character size
         text.CharacterSize = size;
@@ -41,10 +44,7 @@ public class UIText
         text.Position = position;
 
         // Update the origin so it's in the center
-        UpdateOrigin();
-
-        // Set the translation key
-        this.translationKey = translationKey;
+        UpdateTextObject();
 
         // Register the language change callback
         LanguageManager.Instance.RegisterOnLanguageChangedCallback(
@@ -57,16 +57,18 @@ public class UIText
     /// </summary>
     private void OnLanguageChanged()
     {
-        // Set the new translation to the property and then the 
-        // property call `UpdateOrigin` to update the origin
-        Text = LanguageManager.Instance.GetTranslation(translationKey);
+        // Just call the `UpdateTextObject` and let it handle the 
+        // new translation look up and center of the origin
+        UpdateTextObject();
     }
 
     /// <summary>
     /// Used to update the origin of the text to the center
     /// </summary>
-    private void UpdateOrigin()
+    private void UpdateTextObject()
     {
+        text.DisplayedString = LanguageManager.Instance.GetTranslation(
+                                    translationKey);
         // Get the rect of the current text
         FloatRect rect = text.GetLocalBounds();
 

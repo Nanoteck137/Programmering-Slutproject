@@ -22,8 +22,14 @@ public class UISkinSelector
     // The right button to change the skin on the preview
     private UIButton skinChangeRight;
 
+    // The currently selected skin name
+    private UIText skinName;
+
     // The paddle skin id used to look up the skin when rendering a paddle
     private int paddleSkinID = 0;
+
+    // The currently selected skin
+    private Skin currentSkin;
 
     public int PaddleSkinID
     {
@@ -67,6 +73,13 @@ public class UISkinSelector
 
         // Register the callback when the button is clicked on
         skinChangeRight.RegisterOnClickAciton(OnSkinChangeRight);
+
+        // Get the first skin so we can get the name
+        currentSkin = SkinManager.Instance.GetSkinFromID(paddleSkinID);
+
+        // Create skin name text and set it to the first skin
+        skinName = new UIText(new Vector2f(position.X, position.Y + 150.0f),
+                                           currentSkin.Name, 20, font);
     }
 
     /// <summary>
@@ -78,6 +91,12 @@ public class UISkinSelector
         paddleSkinID--;
         if (paddleSkinID < 0)
             paddleSkinID = 0;
+
+        // Get the new skin
+        currentSkin = SkinManager.Instance.GetSkinFromID(paddleSkinID);
+
+        // Apply the new skin name to the text
+        skinName.TranslationKey = currentSkin.Name;
     }
 
     /// <summary>
@@ -90,6 +109,11 @@ public class UISkinSelector
         if (paddleSkinID >= SkinManager.Instance.NumSkins)
             paddleSkinID = SkinManager.Instance.NumSkins - 1;
 
+        // Get the new skin
+        currentSkin = SkinManager.Instance.GetSkinFromID(paddleSkinID);
+
+        // Apply the new skin name to the text
+        skinName.TranslationKey = currentSkin.Name;
     }
 
     /// <summary>
@@ -111,9 +135,8 @@ public class UISkinSelector
     /// render to</param>
     public void Render(RenderTarget renderTarget)
     {
-        // Get the skin and apply it to the preview
-        Skin skin = SkinManager.Instance.GetSkinFromID(paddleSkinID);
-        paddlePreview.FillColor = skin.Color;
+        // Apply the current selected skin
+        paddlePreview.FillColor = currentSkin.Color;
 
         // Render the paddle preview
         renderTarget.Draw(paddlePreview);
@@ -123,5 +146,8 @@ public class UISkinSelector
 
         // Render the skinChangeRight button
         skinChangeRight.Render(renderTarget);
+
+        // Render the skin name
+        skinName.Render(renderTarget);
     }
 }

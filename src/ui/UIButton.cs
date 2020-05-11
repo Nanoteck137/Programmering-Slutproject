@@ -16,10 +16,10 @@ class UIButton
     // A Text Object used to render text in SFML
     private UIText text;
 
-    public string Text
+    public string TranslationKey
     {
-        get { return text.Text; }
-        set { text.Text = value; }
+        get { return text.TranslationKey; }
+        set { text.TranslationKey = value; }
     }
 
     // Action used for if the button is clicked on then the button can 

@@ -14,3 +14,8 @@ settings.changelanguagetitle = Change Language
 settings.backbutton = Back
 
 game.exitmessage = Press ESC to main menu
+
+pack1.skin1 = White
+pack1.skin2 = Red
+pack1.skin3 = Green
+pack1.skin4 = Blue

@@ -3,19 +3,19 @@
 
     "skins": [
         { 
-            "name": "White",
+            "name": "pack1.skin1",
             "color": "#ffffffff"
         },
         { 
-            "name": "Red",
+            "name": "pack1.skin2",
             "color": "#ff000066"
         },
         { 
-            "name": "Green",
+            "name": "pack1.skin3",
             "color": "#00ff00ff"
         },
         { 
-            "name": "Blue",
+            "name": "pack1.skin4",
             "color": "#0000ffff"
         }
     ]
